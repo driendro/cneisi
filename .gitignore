@@ -1,1 +1,6 @@
 /.venv
+active/*
+src/cneisi/__pycache__/*
+src/core/__pycache__/*
+src/core/migrations/__pycache__/*
+src/db.sqlite3

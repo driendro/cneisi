@@ -47,27 +47,51 @@ class TallesRemeras(models.Model):
 
 
 class Usuarios(models.Model):
-    user = models.OneToOneField(User, related_name='UserUsuario', on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     documento = models.IntegerField(unique=True)
     cuit = models.IntegerField()
     fecha_nacimiento = models.DateField()
     telefono_personal = PhoneNumberField()
     telefono_emergencia = PhoneNumberField()
-    caracter = models.CharField(max_length=15, choices=CARACTER_CHOICES)
-    dependencia = models.ManyToManyField('Dependencia', related_name='dependencia')
+    caracter = models.CharField(
+        max_length=15, choices=CARACTER_CHOICES, default='asistente')
     grupo_sangineo = models.CharField(max_length=4, choices=GRUPO_FACTOR_CHOICES)
     regimen_comida = models.CharField(max_length=15, choices=REGIMEN_COMIDA_CHOICES)
     regimen_comida_otro = models.TextField(blank=True, null=True)
-    talle_ropa = models.ForeignKey('TallesRemeras', related_name='talle_remera', on_delete=models.CASCADE)
+    talle_ropa = models.ForeignKey('TallesRemeras', on_delete=models.CASCADE)
     alergia = models.CharField(max_length=2, choices={'si': 'Si', 'no': 'No'})
     alergia_otro = models.TextField(blank=True, null=True)
     medicamento = models.CharField(max_length=2, choices={'si': 'Si', 'no': 'No'})
     medicamento_otro = models.TextField(blank=True, null=True)
 
-    # Otros métodos personalizados si es necesario
+    class Meta:
+        abstract = True
+
+
+class UserAsistente(Usuarios):
+    dependencia = models.ForeignKey(
+        'Dependencia', on_delete=models.CASCADE)
+    
     def __str__(self):
         return '{}, {}'.format(self.user.last_name.upper(), self.user.first_name.title())
 
+    class Meta:
+        managed = True
+        verbose_name = 'Asistente'
+        verbose_name_plural = 'Asistentes'
+
+
+class UserCoordinador(Usuarios):
+    dependencia = models.ManyToManyField(
+        'Dependencia')
+
+    def __str__(self):
+        return '{}, {}'.format(self.user.last_name.upper(), self.user.first_name.title())
+
+    class Meta:
+        managed = True
+        verbose_name = 'Coordinador'
+        verbose_name_plural = 'Coordinadores'
 
 class Aula(models.Model):
     nombre = models.CharField(max_length=20)

@@ -1,0 +1,50 @@
+
+{% extends "base.html" %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+
+<div class="container-fluid">
+    <div class=" row justify-content-center align-items-center" style="height: 90vh;">
+        <div class="col-10 col-sm-6 col-lg-6 col-xl-4" style="background: #EEE; border-radius: 2%; padding: 2.5rem">
+            {% if next %}
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {% if user.is_authenticated %}
+                <strong class="text-center">Su cuenta no tiene acceso a esta página. Para continuar, inicie sesión con
+                    una
+                    cuenta que tenga acceso. </strong>
+                {% else %}
+                <strong class="text-center">Inicie sesión para ver esta página.</strong>
+                {% endif %}
+            </div>
+            {% endif %}
+            <h2 class="fw-bolder text-center">Iniciar sesión</h2>
+            <div class="center-block">
+                <form enctype="multipart/form-data" id="formulario" method="POST">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Usuario:</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Contraseña:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    {% if form.errors %}
+                    <p class="alert alert-danger" role="alert">Tu nombre de usuario y contraseña no coinciden. Por
+                        favor, inténtelo de nuevo.</p>
+                    {% endif %}
+                    <div class="mb-3 text-center">
+                        {% bootstrap_button button_type="submit" content="Ingresar" %}
+                    </div>
+                    <div class="mb-3 text-center">
+                        <a class="btn btn-danger" href="{% url 'password_reset' %}" role="button">¿Olvidaste tu
+                            contraseña?</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

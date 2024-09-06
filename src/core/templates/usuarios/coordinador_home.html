@@ -1,0 +1,65 @@
+{% extends 'base.html' %} {% load django_bootstrap5 %} {% block content %}
+
+<div class="container">
+    <div class="row">
+    <div class="col-md-12 text-center">
+    <h1>Listado de Inscriptos</h1>
+        </div>
+        <div style='display: flex; justify-content: center; align-items: center;'>
+            <a role="button" style='margin: 0 20px' href="{% url 'coordinador_inscribir_uno' %}" class="btn btn-primary btn-md">Añadir Inscripto</a>
+            <a role="button" style='margin: 0 20px' href="{% url 'coordinador_inscribir_muchos' %}" class="btn btn-primary btn-md">Importar desde Excel</a>
+        </div>
+
+    <div class="col-md-12">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Apellido</th>
+            <th>Nombre</th>
+            <th>Documento</th>
+            <th>Correo</th>
+            <th>Caracter</th>
+            <th>Dependencia</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for un_inscripto in object_list %}
+          <tr>
+            <td>{{ un_inscripto.user.last_name.upper }}</td>
+            <td>{{ un_inscripto.user.first_name.title }}</td>
+            <td>{{ un_inscripto.documento }}</td>
+            <td>{{ un_inscripto.user.email }}</td>
+            <td>{{ un_inscripto.caracter.title }}</td>
+            <td>{{ un_inscripto.dependencia.nombre_corto.upper }}
+            </td>
+            <td class="text-center">
+              <a
+                class="btn btn-info btn-sm"
+                href="#"
+                role="button"
+                target="_blank"
+                >Ver</a
+              >
+              <a
+              class="btn btn-warning btn-sm"
+              href="#"
+              role="button"
+                >Editar</a
+              >
+              <form action="#" method="post" style="display: inline">
+                {% csrf_token %}
+                <button class="btn btn-danger btn-sm" type="submit">
+                  Borrar
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

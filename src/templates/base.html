@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load static %}
+{% load django_bootstrap5 %}
+<html lang="es">
+
+<head>
+    {% bootstrap_css %}
+    {% include 'base-head.html' %}
+    <link href="{% static 'css\styles.css' %}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+</head>
+
+<body>
+    {% include 'base-mainmenu.html' %}
+    {% block content %}{% endblock %}
+    {% bootstrap_javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    {% block content_js %}{% endblock %}
+</body>
+
+</html>

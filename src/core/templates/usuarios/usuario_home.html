@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+
+{% block content %}
+<h1>Listado de Inscriptos</h1>
+
+    <!-- Formulario para añadir manualmente -->
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" name="add_manual">Añadir Inscripto</button>
+    </form>
+
+    <!-- Formulario para importar desde Excel -->
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ import_form.as_p }}
+        <button type="submit" name="import_excel">Importar desde Excel</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for inscripto in inscriptos %}
+                <tr>
+                    <td>{{ inscripto.nombre }}</td>
+                    <td>{{ inscripto.email }}</td>
+                    <td>
+                        <a href="{% url 'editar_inscripto' inscripto.pk %}">Editar</a>
+                        <form action="{% url 'borrar_inscripto' inscripto.pk %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">Borrar</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

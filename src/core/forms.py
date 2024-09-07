@@ -2,7 +2,7 @@ from typing import Any
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
-from .models import UserAsistente
+from .models import UserAsistente, Dependencia, UserCoordinador
 import random
 import string
 
@@ -87,7 +87,7 @@ class UsuariosForm(forms.ModelForm):
     def clean_caracter(self):
         caracter = 'Asistente'
         return caracter
-
+    
     def save(self, commit=True):
         user = User.objects.create_user(
             username=self.cleaned_data['documento'],

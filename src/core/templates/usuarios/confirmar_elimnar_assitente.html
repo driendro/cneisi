@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% load django_bootstrap5 %} {% block content %}
+
+<div class="container-fluid">
+  <div
+    class="row justify-content-center align-items-center"
+    style="height: 90vh"
+  >
+    <div
+      class="col-10 col-sm-6 col-lg-6 col-xl-4"
+      style="background: #eee; border-radius: 2%; padding: 2.5rem"
+    >
+    <h1>¿Estás seguro de eliminar este producto?</h1>
+<p>{{ object }}</p>
+      <h2 class="fw-bolder text-center">¿Estás seguro que desea desinscribir a {{ objeto.user.apellido.upper }}, {{objeto.user.nombre.title}}?</h2>
+      <div class="center-block">
+        <form method="POST">
+          {% csrf_token %}
+          <input type="submit" value="Eliminar" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

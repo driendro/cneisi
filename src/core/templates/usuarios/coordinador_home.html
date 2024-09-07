@@ -44,11 +44,11 @@
               >
               <a
               class="btn btn-warning btn-sm"
-              href="#"
+              href="{% url 'coordinador_editar_asistente' pk=un_inscripto.pk %}"
               role="button"
                 >Editar</a
               >
-              <form action="#" method="post" style="display: inline">
+              <form action="{% url 'coordinador_eliminar_asistente' pk=un_inscripto.pk %}" method="post" style="display: inline">
                 {% csrf_token %}
                 <button class="btn btn-danger btn-sm" type="submit">
                   Borrar

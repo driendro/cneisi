@@ -2,8 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.views import View
-from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView
+from django.views.generic import TemplateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
 from tablib import Dataset
@@ -48,7 +48,7 @@ class UsuariosCreateView(GroupRequiredMixin, CreateView):
         # Agrega un título para la página
         context['title'] = 'Registro de Usuario'
         return context
-
+    
 
 def import_users(request):
     if request.method == 'POST':
@@ -68,8 +68,7 @@ def import_users(request):
                 for row_errors in result.row_errors():
                     row_num = row_errors[0]
                     errors = row_errors[1]
-                    error_list.append(f"Fila {row_num}: {
-                                      ', '.join([str(e.error) for e in errors])}")
+                    error_list.append(f"Fila {row_num}: {', '.join([str(e.error) for e in errors])}")
 
                 messages.error(
                     request, f"Errores durante la importación:\n{error_list}")
@@ -83,3 +82,17 @@ def import_users(request):
         return redirect('coordinador_inscribir_muchos')
 
     return render(request, 'usuarios/import.html')
+
+
+class EditarAsistente(GroupRequiredMixin, UpdateView):
+    model = UserAsistente
+    form_class = UsuariosForm
+    group_name = 'coordinador'
+    template_name = 'editar_producto.html'
+    success_url = 'coordinador_home'
+    
+    
+class EliminarAsistente(GroupRequiredMixin, DeleteView):
+    model = UserAsistente
+    template_name = 'confirmar_eliminacion.html'
+    success_url = 'coordinador_home'

@@ -1,8 +1,9 @@
 from django.contrib import messages
+from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
 from django.views import View
-from django.views.generic import TemplateView, DeleteView
+from django.views.generic import TemplateView, DeleteView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 
@@ -10,7 +11,7 @@ from tablib import Dataset
 
 # Create your views here.
 from .models import UserAsistente, UserCoordinador
-from .forms import UsuariosForm
+from .forms import UsuariosForm, AsistenteUpdateForm
 from .mixins import GroupRequiredMixin
 from .resources import AsistenteResource, CoordinadorResource
 
@@ -86,13 +87,27 @@ def import_users(request):
 
 class EditarAsistente(GroupRequiredMixin, UpdateView):
     model = UserAsistente
-    form_class = UsuariosForm
+    form_class = AsistenteUpdateForm
     group_name = 'coordinador'
-    template_name = 'editar_producto.html'
-    success_url = 'coordinador_home'
-    
-    
+    template_name = 'usuarios/update_uno.html'
+    success_url = reverse_lazy('coordinador_home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Agrega un título para la página
+        context['title'] = 'Actualizar datos del Asistente'
+        return context
+
+
 class EliminarAsistente(GroupRequiredMixin, DeleteView):
     model = UserAsistente
+    group_name = 'coordinador'
     template_name = 'confirmar_eliminacion.html'
-    success_url = 'coordinador_home'
+    success_url = reverse_lazy('coordinador_home')
+
+
+class DetalleAsistente(GroupRequiredMixin, DetailView):
+    model = UserAsistente
+    group_name = 'coordinador'
+    template_name = 'usuarios/view_uno.html'  # Template que usaremos
+    context_object_name = 'user_asistente'  # Nombre con el que accederás al objeto en la plantilla

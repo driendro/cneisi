@@ -40,9 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_bootstrap5',
+    'django_bootstrap_icons',
     'core',
     'phonenumber_field',
-    'import_export'
+    'import_export',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,55 @@
+{% extends 'base.html' %} {% load django_bootstrap5 %} {% block content %}
+
+<div class="container-fluid">
+  <div
+    class="row justify-content-center align-items-center"
+    style="height: 90vh"
+  >
+    <div
+      class="col-10 col-lg-10 col-xl-6"
+      style="
+        background: #eee;
+        border-radius: 2%;
+        padding: 2.5rem;
+        text-align: center;
+      "
+    >
+      <h2 class="fw-bolder text-center">Detalles del Usuario Asistente</h2>
+      <div class="center-block" style="margin-bottom: 5%">
+        <p><strong>Nombre:</strong> {{ user_asistente.user.first_name.title }}</p>
+        <p><strong>Apellido:</strong> {{ user_asistente.user.last_name.upper }}</p>
+        <p>
+          <strong>Correo Electrónico:</strong> {{ user_asistente.user.email }}
+        </p>
+        <p><strong>Documento:</strong> {{ user_asistente.documento }}</p>
+        <p><strong>Cuit:</strong> {{ user_asistente.cuit }}</p>
+        <p>
+          <strong>Fecha de Nacimiento:</strong> {{user_asistente.fecha_nacimiento }}
+        </p>
+        <p>
+          <strong>Teléfono Personal:</strong> {{ user_asistente.telefono_personal }}
+        </p>
+        <p>
+          <strong>Teléfono de Emergencia:</strong> {{user_asistente.telefono_emergencia }}
+        </p>
+        <p><strong>Dependencia:</strong> {{ user_asistente.dependencia }}</p>
+        <p>
+          <strong>Grupo Sanguíneo:</strong> {{ user_asistente.grupo_sangineo }}
+        </p>
+        <p>
+          <strong>Régimen Comida:</strong> {{ user_asistente.regimen_comida }}
+        </p>
+        <p>
+          <strong>Otro Régimen Comida:</strong> {{user_asistente.regimen_comida_otro }}
+        </p>
+        <p><strong>Alergias:</strong> {{ user_asistente.alergia }}</p>
+        <p><strong>Otra Alergia:</strong> {{ user_asistente.alergia_otro }}</p>
+        <p><strong>Medicamentos:</strong> {{ user_asistente.medicamento }}</p>
+        <p>
+          <strong>Otro Medicamento:</strong> {{ user_asistente.medicamento_otro}}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

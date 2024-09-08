@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from core.views import PerfilHome, InscriptosList, UsuariosCreateView, import_users, EliminarAsistente, EditarAsistente
+from core.views import PerfilHome, InscriptosList, UsuariosCreateView, import_users, EliminarAsistente, EditarAsistente, DetalleAsistente
 
 
 urlpatterns = [
@@ -32,4 +32,6 @@ urlpatterns = [
          name='coordinador_editar_asistente'),
     path('coordinador/user/<int:pk>/eliminar', EliminarAsistente.as_view(),
          name='coordinador_eliminar_asistente'),
+    path('coordinador/user/<int:pk>/ver', DetalleAsistente.as_view(),
+         name='coordinador_ver_asistente'),
 ]

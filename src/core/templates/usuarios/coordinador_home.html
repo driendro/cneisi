@@ -1,65 +1,101 @@
-{% extends 'base.html' %} {% load django_bootstrap5 %} {% block content %}
+{% extends 'base.html' %} {% load django_bootstrap5 %} {% load bootstrap_icons %} {% block content %}
 
-<div class="container">
-    <div class="row">
-    <div class="col-md-12 text-center">
-    <h1>Listado de Inscriptos</h1>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Listado de Inscriptos</h1>
+            </div>
+            <div style='display: flex; justify-content: center; align-items: center;'>
+                <a role="button" style='margin: 0 20px' href="{% url 'coordinador_inscribir_uno' %}" class="btn btn-primary btn-md">Añadir Inscripto</a>
+                {% comment %} <a role="button" style='margin: 0 20px' href="{% url 'coordinador_inscribir_muchos' %}" class="btn btn-primary btn-md">Importar desde Excel</a> {% endcomment %}
+            </div>
+
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><input type="text" id="filterApellido" class="form-control" placeholder="Apellido"></th>
+                            <th><input type="text" id="filterNombre" class="form-control" placeholder="Nombre"></th>
+                            <th><input type="text" id="filterDocumento" class="form-control" placeholder="Documento"></th>
+                            <th><input type="email" id="filterCorreo" class="form-control" placeholder="Correo"></th>
+                            <th><input type="text" id="filterCaracter" class="form-control" placeholder="Caracter"></th>
+                            <th><input type="text" id="filterDependencia" class="form-control" placeholder="Dependencia"></th>
+                            <th class="text-center">
+                                {% comment %} <button type="submit" class="btn btn-primary btn-sm">Filtrar</button> {% endcomment %}
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Apellido</th>
+                            <th>Nombre</th>
+                            <th>Documento</th>
+                            <th>Correo</th>
+                            <th>Caracter</th>
+                            <th>Dependencia</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="inscriptosTableBody">
+                        {% for un_inscripto in object_list %}
+                        <tr>
+                            <td>{{ un_inscripto.user.last_name.upper }}</td>
+                            <td>{{ un_inscripto.user.first_name.title }}</td>
+                            <td>{{ un_inscripto.documento }}</td>
+                            <td>{{ un_inscripto.user.email }}</td>
+                            <td>{{ un_inscripto.caracter.title }}</td>
+                            <td>{{ un_inscripto.dependencia.nombre_corto.upper }}</td>
+                            <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-info btn-sm" href="{% url 'coordinador_ver_asistente' pk=un_inscripto.pk %}" role="button" target="_blank">{% bs_icon 'eye' %}</a>
+                                <a class="btn btn-warning btn-sm" href="{% url 'coordinador_editar_asistente' pk=un_inscripto.pk %}" role="button">{% bs_icon 'pencil-square' %}</a>
+                                <form action="{% url 'coordinador_eliminar_asistente' pk=un_inscripto.pk %}" method="post" style="display: inline">
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>
+                                </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div style='display: flex; justify-content: center; align-items: center;'>
-            <a role="button" style='margin: 0 20px' href="{% url 'coordinador_inscribir_uno' %}" class="btn btn-primary btn-md">Añadir Inscripto</a>
-            <a role="button" style='margin: 0 20px' href="{% url 'coordinador_inscribir_muchos' %}" class="btn btn-primary btn-md">Importar desde Excel</a>
-        </div>
-
-    <div class="col-md-12">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th>Apellido</th>
-            <th>Nombre</th>
-            <th>Documento</th>
-            <th>Correo</th>
-            <th>Caracter</th>
-            <th>Dependencia</th>
-            <th class="text-center">Acciones</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {% for un_inscripto in object_list %}
-          <tr>
-            <td>{{ un_inscripto.user.last_name.upper }}</td>
-            <td>{{ un_inscripto.user.first_name.title }}</td>
-            <td>{{ un_inscripto.documento }}</td>
-            <td>{{ un_inscripto.user.email }}</td>
-            <td>{{ un_inscripto.caracter.title }}</td>
-            <td>{{ un_inscripto.dependencia.nombre_corto.upper }}
-            </td>
-            <td class="text-center">
-              <a
-                class="btn btn-info btn-sm"
-                href="#"
-                role="button"
-                target="_blank"
-                >Ver</a
-              >
-              <a
-              class="btn btn-warning btn-sm"
-              href="{% url 'coordinador_editar_asistente' pk=un_inscripto.pk %}"
-              role="button"
-                >Editar</a
-              >
-              <form action="{% url 'coordinador_eliminar_asistente' pk=un_inscripto.pk %}" method="post" style="display: inline">
-                {% csrf_token %}
-                <button class="btn btn-danger btn-sm" type="submit">
-                  Borrar
-                </button>
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
     </div>
-  </div>
-</div>
+
 {% endblock %}
+
+
+{% block content_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input[id^="filter"]');
+            const tableBody = document.getElementById('inscriptosTableBody');
+            const rows = tableBody.getElementsByTagName('tr');
+
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    const filterValues = Array.from(inputs).map(input => input.value.toLowerCase());
+                    
+                    for (let i = 0; i < rows.length; i++) {
+                        let shouldHide = false;
+                        const cells = rows[i].getElementsByTagName('td');
+                        
+                        for (let j = 0; j < filterValues.length; j++) {
+                            const cell = cells[j];
+                            if (cell) {
+                                const cellText = cell.textContent.toLowerCase();
+                                if (!cellText.includes(filterValues[j])) {
+                                    shouldHide = true;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        rows[i].style.display = shouldHide ? 'none' : '';
+                    }
+                });
+            });
+        });
+</script>
+
+{% endblock %}
+

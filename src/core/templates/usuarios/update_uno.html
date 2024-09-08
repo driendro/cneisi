@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% load django_bootstrap5 %} {% block content %}
+
+<div class="container-fluid">
+  <div
+    class="row justify-content-center align-items-center"
+    style="height: 90vh"
+  >
+    <div
+      class="col-10 col-lg-10 col-xl-6"
+      style="
+        background: #eee;
+        border-radius: 2%;
+        padding: 2.5rem;
+        text-align: center;
+      "
+    >
+      <h2 class="fw-bolder text-center">{{ title }}</h2>
+      <div class="center-block" style="margin-bottom: 5%">
+        <form enctype="multipart/form-data" id="formulario" method="POST">
+          {% csrf_token %} {% bootstrap_form form %} {#% bootstrap_form modelo_asistente_form %#}
+          <div class="row conteiner-fluid" id="id_botones_div">
+            <div class="col-lg-2">
+              {% bootstrap_button button_type="submit" content="Actualizar" %}
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

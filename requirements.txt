@@ -7,3 +7,4 @@ django-phonenumber-field==8.0.0
 phonenumbers==8.13.44
 sqlparse==0.5.1
 tzdata==2024.1
+django-bootstrap-icons==0.8.3

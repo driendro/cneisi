@@ -1,6 +1,223 @@
-{% extends 'base.html' %}
-{% load django_bootstrap5 %}
-
+{% extends 'base_home.html' %} {% load static %} {% load django_bootstrap5 %} {% load bootstrap_icons %}
 {% block content %}
-<h1>Hola mundo!</h1>
+
+        <!-- Icons Grid-->
+        <section class="features-icons bg-light text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                    <div class="features-icons-icon d-flex"> <img src="{% static 'img/icono_ia.png' %}" class="d-block w-100"/></div>
+                    <h3>Inteligencia Artificial</h3>
+                    <p class="lead mb-0">Aplicaciones innovadoras en el mundo moderno y su impacto en diversas industrias.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                    <div class="features-icons-icon d-flex"><img src="{% static 'img/icono_shield.png' %}" class="d-block w-100" /></div>
+                    <h3>Ciberseguridad</h3>
+                    <p class="lead mb-0">Protección de datos sensibles, marcos legales y técnicas de hacking ético.</p>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                    <div class="features-icons-icon d-flex"><img src="{% static 'img/icono_isi.png' %}" class="d-block w-100" /></div>
+                    <h3>Ingeniería y Educación Integral</h3>
+                    <p class="lead mb-0">Enfoque en la educación integral en sistemas de información para estudiantes y jóvenes profesionales.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+        <!-- Image Showcases-->
+        <section class="showcase">
+            <div class="container-fluid p-0">
+                <div class="row g-0">
+                    <div class="col-lg-6 order-lg-2 text-white showcase-img"><img src="{% static 'img/introduccion.jpg' %}" class="d-block w-100" /></div>
+                    <div class="col-lg-6 order-lg-1 my-auto showcase-text px-4 py-5">
+                        <h2>Introducción</h2>
+                        <p class="lead mb-0"> El Congreso Nacional de Estudiantes de Sistemas de Información es un evento que reúne a estudiantes, académicos y profesionales del campo de la Ingeniería en Sistemas de Información de todo el país. Es esencial para ampliar el horizonte académico y profesional de los participantes, permitiendo actualizarse sobre las últimas tendencias y tecnologías del sector.
+        </p>
+        <p class="lead mb-0">Durante este congreso se tratarán 3 tópicos principales:</p>
+        <ul>
+          <li>Inteligencia Artificial – Aplicaciones en el mundo.</li>
+          <li>
+            Ciberseguridad – Datos sensibles, aspectos legales y hacking ético.
+          </li>
+          <li>Futuros Líderes de la Tecnología.</li>
+        </ul>
+        <p class="lead mb-0">
+          También habrá charlas que abarcarán temas para la formación integral
+          del ingeniero, como inserción laboral, huella de carbono, y desarrollo
+          de habilidades blandas.
+        </p>
+                    </div>
+                </div>
+                <div class="row g-0">
+                    <div class="col-lg-6 text-white showcase-img"><img src="{% static 'img/objetivos.jpg' %}" class="d-block w-100" /></div>
+                    <div class="col-lg-6 my-auto showcase-text">
+                        <h2>Objetivos</h2>
+                        <p class="lead mb-0">
+          El Congreso es una oportunidad única para que los estudiantes expandan
+          sus horizontes, se inspiren y se preparen para enfrentar los desafíos
+          del futuro en la ingeniería en sistemas de información. El principal
+          objetivo es brindar un espacio para la actualización y desarrollo de
+          habilidades técnicas, fomentar el intercambio de conocimientos, la
+          innovación y el desarrollo profesional.
+        </p>
+        <p class="lead mb-0">
+          Así mismo, el congreso busca promover la creación de redes de contacto
+          entre futuros líderes de la tecnología y facilitar la colaboración
+          entre la academia y la industria.
+        </p>
+                    </div>
+                </div>
+                <div class="row g-0">
+                    <div class="col-lg-6 order-lg-2 text-white showcase-img"><img src="{% static 'img/fechas.jpg' %}" class="d-block w-100" /></div>
+                    <div class="col-lg-6 order-lg-1 my-auto showcase-text px-4 py-5">
+                        <h2>Modalidad y Cronograma</h2>
+                        <p class="lead mb-0">
+          El Congreso Nacional de Estudiantes de Sistemas de Información se
+          llevará a cabo los días <strong>25, 26 y 27 de Octubre</strong> en la
+          <strong
+            >Universidad Tecnológica Nacional, Facultad Regional La
+            Plata</strong
+          >.
+        </p>
+        <p class="lead mb-0">
+          Durante estos tres días, los asistentes podrán disfrutar de
+          aproximadamente 26 conferencias divididas entre los distintos días.
+          Estas conferencias abordarán los tres tópicos principales mencionados
+          y otros temas relacionados con la carrera y el desarrollo profesional.
+        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-0">
+                    <div class="col-lg-6 text-white showcase-img"><img src="{% static 'img/publico.jpg' %}" class="d-block w-100" /></div>
+                    <div class="col-lg-6 my-auto showcase-text px-4 py-5">
+                        <h2>Publico</h2>
+                        <p class="lead mb-0">
+          El congreso está dirigido principalmente a estudiantes de Ingeniería
+          en Sistemas de Información. Asistirán estudiantes de diferentes
+          Facultades Regionales de la UTN, así como académicos, profesionales y
+          directivos de empresas líderes en la industria.
+        </p>
+                        <p class="lead mb-0">
+          Este congreso es una oportunidad para que los asistentes interactúen
+          con jóvenes profesionales, referentes de la industria y destacados
+          académicos del sector.
+        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="row g-0">
+                    <div class="col-lg-6 order-lg-2 text-white showcase-img"><img src="{% static 'img/sponsors.png' %}" class="d-block w-100" /></div>
+                    <div class="col-lg-6 order-lg-1 my-auto showcase-text px-4 py-5">
+                        <h2>Invitación a Sponsors</h2>
+                        <p class="lead mb-0">
+          Nos encantaría contar con el apoyo de empresas y organizaciones que quieran patrocinar este evento y colaborar con el desarrollo de los futuros líderes de la tecnología. Al participar como sponsor, tendrás la oportunidad de conectar con jóvenes talentos, profesionales y académicos destacados en la industria.
+                </p>
+                <p class="lead mb-0">
+                    Si te registras como sponsor antes del <strong>1 de octubre</strong>, tu logo y nombre de empresa serán destacados en esta sección del congreso, visible para todos los asistentes, tanto virtuales como presenciales.
+                </p>
+                <p class="lead mb-0">
+                    ¡No pierdas la oportunidad de ser parte de este evento único y contribuir al desarrollo de los ingenieros del futuro!
+                </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Testimonials-->
+        <section class="testimonials text-center bg-light">
+    <div class="container">
+        <h2 class="mb-5">Nos esponsorean</h2>
+        <div id="sponsorsCarousel" class="carousel slide">
+            <div class="carousel-inner">
+                <div class="carousel-item active"data-bs-interval="1000">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                <img class="img-fluid rounded-circle mb-3" src="https://placehold.co/150" alt="Sponsor 1" />
+                                <h5>Sponsor 1</h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                <img class="img-fluid rounded-circle mb-3" src="https://placehold.co/150" alt="Sponsor 2" />
+                                <h5>Sponsor 2</h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                <img class="img-fluid rounded-circle mb-3" src="https://placehold.co/150" alt="Sponsor 3" />
+                                <h5>Sponsor 3</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                <img class="img-fluid rounded-circle mb-3" src="https://placehold.co/150" alt="Sponsor 4" />
+                                <h5>Sponsor 4</h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                <img class="img-fluid rounded-circle mb-3" src="https://placehold.co/150" alt="Sponsor 5" />
+                                <h5>Sponsor 5</h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                <img class="img-fluid rounded-circle mb-3" src="https://placehold.co/150" alt="Sponsor 6" />
+                                <h5>Sponsor 6</h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                <img class="img-fluid rounded-circle mb-3" src="https://placehold.co/150" alt="Sponsor 7" />
+                                <h5>Sponsor 7</h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="testimonial-item mx-auto mb-5 mb-lg-0">
+                                <img class="img-fluid rounded-circle mb-3" src="https://placehold.co/150" alt="Sponsor 8" />
+                                <h5>Sponsor 8</h5>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <!-- Vacío para mantener el diseño, si necesitas más patrocinadores, agrégales aquí -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#sponsorsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#sponsorsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer
+  class="py-4 bg-dark text-white text-center"
+  style="background: linear-gradient(to right, #304355, #3497da)"
+>
+  <p>
+    &copy; 2024 Congreso Nacional de Estudiantes de Ingeniería en Sistemas de
+    Información. Todos los derechos reservados.
+  </p>
+</footer>
 {% endblock %}

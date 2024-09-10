@@ -1,18 +1,19 @@
 {% load static %}
 <!-- Static navbar -->
-<nav class="navbar navbar-expand-lg sticky-top navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg sticky-top" style="background: linear-gradient(to right, #304355, #3497DA)">
     <div class="container px-5">
         <a class="navbar-brand" href="#">
-            <img src="{% static 'landing/img/logo_frlp_b.png' %}">
+            <img src="{% static 'img/imagotipo.png' %}">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="#">Inicio</a></li>
+                {% comment %}
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="{% url 'home' %}">Inicio</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+                    <a class="nav-link dropdown-toggle text-white fw-bold" id="navbarDropdownBlog" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">Trabajos</a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
                         <li><a class="dropdown-item" href="{% url 'trabajos_ejes' %}">Eje Tematicos</a></li>
@@ -20,25 +21,26 @@
                         <li><a class="dropdown-item" href="#">Envio de Trabajos</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#">Inscripcion</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Conferencias</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">Inscripcion</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">Conferencias</a></li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdownBlog" href="#" role="button"
+                    <a class="nav-link dropdown-toggle text-white fw-bold" id="navbarDropdownBlog" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">Evento</a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownBlog">
                         <li><a class="dropdown-item" href="#">Cronograma General</a></li>
                         <li><a class="dropdown-item" href="#">Cronograma de Actividades</a></li>
                     </ul>
                 </li>
-                <li class="nav-item"><a class="nav-link" href="#">Certificados</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Contacto</a></li>
-                <li class="nav-item"><a class="nav-link" href="#">Circulares</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">Certificados</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">Contacto</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">Circulares</a></li>
+                {% endcomment %}
                 {% if request.user.is_authenticated %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'perfil_home' %}">Administracion</a></li>
-                <li class="nav-item"><a class="nav-link" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="{% url 'perfil_home' %}">Administracion</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
                     <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
                 {% else %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Entrar</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="{% url 'login' %}">Login</a></li>
                 {% endif %}
             </ul>
         </div>

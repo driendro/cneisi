@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+{% load static %}
+{% load django_bootstrap5 %}
+<html lang="es">
+
+<head>
+    {% bootstrap_css %}
+    {% include 'base-head.html' %}
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <style>
+        /* Estilo para la imagen de cabecera */
+        .header-image-container {
+            width: 100%;
+            height: auto; /* Ocupa toda la altura de la ventana */
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover; /* Asegura que la imagen cubra el contenedor sin deformarse */
+        }
+
+        /* Navbar sticky */
+        /*.navbar {
+        /*    position: sticky;
+        /*    top: 0;
+        /*    z-index: 1000; /* Asegúrate de que el navbar se mantenga sobre otros elementos */
+        /*    background-color: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente */
+        /*    transition: background-color 0.3s ease-in-out; /* Transición suave del fondo */
+        /*}
+
+        /* Estilo cuando se hace scroll */
+        body.scrolled .navbar {
+            background-color: rgba(0, 0, 0, 0.9); /* Fondo oscuro cuando se hace scroll */
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'base-mainmenu.html' %}
+    <!-- Imagen a pantalla completa antes del navbar -->
+    <div class="header-image-container">
+        <img src="{% static 'img/header.png' %}" alt="Header Image" class="header-image">
+    </div>
+    
+    <!-- Contenido principal -->
+    {% block content %}{% endblock %}
+    
+    {% bootstrap_javascript %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script>
+        // Cambia el fondo del navbar cuando se hace scroll
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) { // Si se desplaza más de 50px
+                document.body.classList.add('scrolled');
+            } else {
+                document.body.classList.remove('scrolled');
+            }
+        });
+    </script>
+    {% block content_js %}{% endblock %}
+</body>
+
+</html>

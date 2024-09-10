@@ -29,6 +29,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#CSRF_TRUSTED_ORIGINS = ['https://*ingreso.frlp.utn.edu.ar', 'https://*.127.0.0.1']
+
+SESSION_COOKIE_AGE = 60*60*1  # 1 hs
 
 # Application definition
 
@@ -147,3 +150,13 @@ LOGOUT_URL = reverse_lazy('home')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+'''
+DEFAULT_FROM_EMAIL = #env('EMAIL_ALIAS')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.office365.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = #env('EMAIL_USER')
+EMAIL_HOST_PASSWORD = #env('EMAIL_PASS')
+'''

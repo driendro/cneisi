@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-&@s+_p$=g6li58wno^h&@fv38l6g87^7^_rkxw573gp)25@(v6
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.66.133', 'localhost']
 
 #CSRF_TRUSTED_ORIGINS = ['https://*ingreso.frlp.utn.edu.ar', 'https://*.127.0.0.1']
 

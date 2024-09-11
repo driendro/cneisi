@@ -1,0 +1,66 @@
+@font-face {
+    font-family: 'Planc-regular'; /* Nombre que le das a la fuente */
+    src: url('../fonts/Planc_wfx/Planc-Regular.otf') format('opentype'); /* Ruta a la fuente */
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Planc-bold'; /* Nombre que le das a la fuente */
+    src: url('../fonts/Planc_wfx/Planc-Bold.otf') format('opentype'); /* Ruta a la fuente */
+    font-weight: normal;
+    font-style: normal;
+}
+
+
+body {
+    font-family: 'Planc-regular', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Planc-bold', sans-serif;
+    text-transform: uppercase;
+}
+
+
+.div_right {
+  background:
+    url('data:image/svg+xml,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%20%3Cpath%20d%3D%22M0%2C15%20L30%2C15%20M15%2C0%20L15%2C30%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%221%22%20opacity%3D%220.2%22/%3E%3C/svg%3E'),
+    linear-gradient(to right, #314659, #3495d6);
+  background-size: 30px 30px, 100% auto;
+  background-attachment: fixed;
+  background-position: 0 0;
+  background-repeat: repeat;
+}
+
+.div_left {
+  background:
+    url('data:image/svg+xml,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%20%3Cpath%20d%3D%22M0%2C15%20L30%2C15%20M15%2C0%20L15%2C30%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%221%22%20opacity%3D%220.2%22/%3E%3C/svg%3E'),
+    linear-gradient(to left, #314659, #3495d6);
+  background-size: 30px 30px, cover;
+  background-attachment: fixed;
+  background-position: 0 0;
+  background-repeat: repeat;
+}
+
+.sponsors {
+  background: #63c1ff;
+  background-size: cover;
+  /*background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"> <path d="M0,0 L30,30 M30,0 L0,30" stroke="#fff" stroke-width="2"/></svg>');*/
+  background-attachment: fixed;
+  background-position: 0 0, 10px 10px;
+  background-repeat: repeat;
+}
+
+.header-image-container {
+  width: 100%;
+  height: auto; /* Ocupa toda la altura de la ventana */
+  overflow: hidden;
+  position: relative;
+}
+
+.header-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Asegura que la imagen cubra el contenedor sin deformarse */
+}

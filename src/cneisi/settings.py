@@ -12,24 +12,31 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from django.urls import reverse_lazy
+import environ
 import os
+env = environ.Env(
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+# Tomar las Variables de entorno del archivo .env
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-&@s+_p$=g6li58wno^h&@fv38l6g87^7^_rkxw573gp)25@(v6'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['192.168.66.133', 'localhost']
+ALLOWED_HOSTS = str(env('ALLOWED_HOSTS')).split(',')
+print(ALLOWED_HOSTS)
+print('##########################################################')
 
-#CSRF_TRUSTED_ORIGINS = ['https://*ingreso.frlp.utn.edu.ar', 'https://*.127.0.0.1']
+#CSRF_TRUSTED_ORIGINS = ['https://*cneisi.frlp.utn.edu.ar', 'https://*.127.0.0.1']
 
 SESSION_COOKIE_AGE = 60*60*1  # 1 hs
 
@@ -83,12 +90,27 @@ WSGI_APPLICATION = 'cneisi.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if env('DEBUG') == True:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': env('DATABASE_NAME'),
+            'USER': env('DATABASE_USER'),
+            'PASSWORD': env('DATABASE_PASS'),
+            'HOST': env('DATABASE_HOST'),
+            'PORT': env('DATABASE_PORT'),
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"
+            },
+        }
+    }
 
 
 # Password validation

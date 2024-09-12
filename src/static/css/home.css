@@ -17,9 +17,10 @@ body {
     font-family: 'Planc-regular', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, p {
     font-family: 'Planc-bold', sans-serif;
     text-transform: uppercase;
+    color: white;
 }
 
 
@@ -27,7 +28,7 @@ h1, h2, h3, h4, h5, h6 {
   background:
     url('data:image/svg+xml,%3Csvg%20width%3D%2230%22%20height%3D%2230%22%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%3E%20%3Cpath%20d%3D%22M0%2C15%20L30%2C15%20M15%2C0%20L15%2C30%22%20stroke%3D%22%23ffffff%22%20stroke-width%3D%221%22%20opacity%3D%220.2%22/%3E%3C/svg%3E'),
     linear-gradient(to right, #314659, #3495d6);
-  background-size: 30px 30px, 100% auto;
+  background-size: 2.78%, auto, 100% auto;
   background-attachment: fixed;
   background-position: 0 0;
   background-repeat: repeat;

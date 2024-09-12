@@ -1,15 +1,16 @@
-{% load static %}
+{% load static %} {% load django_bootstrap5 %} {% load bootstrap_icons %}
 <!-- Static navbar -->
-<nav class="navbar navbar-expand-lg sticky-top" style="background: linear-gradient(to right, #304355, #3497DA)">
-    <div class="container px-5">
+<nav class="navbar navbar-expand-lg sticky-top" style="background: linear-gradient(to right, #1b2c3b, #1b2c3b)">
+    <div class="container px-2">
         <a class="navbar-brand" href="{% url 'home' %}">
             <img src="{% static 'img/imagotipo.png' %}">
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
-                class="navbar-toggler-icon"></span></button>
+                class="navbar-dark navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="https://www.instagram.com/utnfrlp.eventos/">{% bs_icon 'instagram' %} @utnfrlp.eventos </a></li>
                 {% comment %}
                 <li class="nav-item"><a class="nav-link text-white fw-bold" href="{% url 'home' %}">Inicio</a></li>
                 <li class="nav-item dropdown">
@@ -33,7 +34,6 @@
                 </li>
                 <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">Certificados</a></li>
                 <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">Contacto</a></li>
-                <li class="nav-item"><a class="nav-link text-white fw-bold" href="#">Circulares</a></li>
                 {% endcomment %}
                 {% if request.user.is_authenticated %}
                 <li class="nav-item"><a class="nav-link text-white fw-bold" href="{% url 'perfil_home' %}">Administracion</a></li>

@@ -83,6 +83,15 @@ class UsuariosForm(forms.ModelForm):
                 'type': 'text', 'class': 'form-control'}
             )
         }
+
+    def __init__(self, *args, **kwargs):
+        # Captura el usuario pasado como argumento
+        user = kwargs.pop('user', None)
+        super(UsuariosForm, self).__init__(*args, **kwargs)
+        if user:
+            # Filtra las dependencias por el usuario logueado
+            self.fields['dependencia'].queryset = Dependencia.objects.filter(
+                usuarios=user)
     
     def clean_caracter(self):
         caracter = 'Asistente'

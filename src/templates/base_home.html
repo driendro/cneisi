@@ -13,9 +13,13 @@
 <body>
     {% include 'base-mainmenu.html' %}
     <!-- Imagen a pantalla completa antes del navbar -->
+    {% comment %} 
     <div class="header-image-container">
-        <img src="{% static 'img/header.jpg' %}" alt="Header Image" class="header-image">
+        <img src="{% static 'img/header/superior.png' %}" alt="Header Image" class="header-image">
     </div>
+    {% endcomment %}
+
+
 
     <!-- Contenido principal -->
     {% block content %}{% endblock %}
@@ -23,16 +27,7 @@
     {% bootstrap_javascript %}
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Cambia el fondo del navbar cuando se hace scroll
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) { // Si se desplaza más de 50px
-                document.body.classList.add('scrolled');
-            } else {
-                document.body.classList.remove('scrolled');
-            }
-        });
-    </script>
+
     {% block content_js %}{% endblock %}
 </body>
 

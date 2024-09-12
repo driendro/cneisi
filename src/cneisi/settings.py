@@ -32,9 +32,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = str(env('ALLOWED_HOSTS')).split(',')
-print(ALLOWED_HOSTS)
-print('##########################################################')
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
 #CSRF_TRUSTED_ORIGINS = ['https://*cneisi.frlp.utn.edu.ar', 'https://*.127.0.0.1']
 
@@ -173,12 +171,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
-'''
-DEFAULT_FROM_EMAIL = #env('EMAIL_ALIAS')
+DEFAULT_FROM_EMAIL = env('EMAIL_ALIAS')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.office365.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = #env('EMAIL_USER')
-EMAIL_HOST_PASSWORD = #env('EMAIL_PASS')
-'''
+EMAIL_HOST_USER = env('EMAIL_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_PASS')
+

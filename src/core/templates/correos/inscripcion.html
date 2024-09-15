@@ -1,0 +1,38 @@
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+<div class="container-fluid">
+    <div class=" row justify-content-center align-items-center" style="height: 90vh;">
+        <div class="col-10 col-sm-6 col-lg-6" style="background: #EEE; border-radius: 2%; padding: 2.5rem">
+
+        <p>Hola {{ nombre }}:</p>
+
+        <p>Esperamos que te encuentre bien.</p>
+
+        <p>Nos complace informarte que tu inscriopcin al CNEISI 2024, a sido realizada con existo por el coordinador de {{ dependencia.upper }}.</p>
+
+        <p>Por favor, para poder asistir a las conferencias y charlas no te olvides de inscribirte a las mismas en el siguiente link.</p>
+
+        <ul>
+        <li>Link: <a href="{{ request.scheme }}://{{ request.get_host }}{% url 'login' %}">{{ request.scheme }}://{{ request.get_host }}{% url 'login' %}</a></li>
+        <ul>
+            <li>Usuario: {{usuario}} (deberia ser tu DNI)</li>
+            <li>Contraseña: En la paguina del loguin debera poner "Olvide mi contraseña", y seguir los pasos para generar una nueva</li>
+        </ul>
+        </ul>
+
+        <p>Dentrode la misma paguina vas a poder ver toda la info del Congreso y de las actividades.</p>
+
+        <p>Saludos cordiales,</p>
+        <p style="text-align: right">
+            <strong>
+            CNEISI 2024 <br>
+            Regional La Plata - UTN <br>
+            cneisi@frlp.utn.edu.ar
+            </strong>
+        </p>
+        </div>
+    </div>
+</div>

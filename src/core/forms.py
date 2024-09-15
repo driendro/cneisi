@@ -2,6 +2,7 @@ from typing import Any
 from django import forms
 from django.core.exceptions import ValidationError
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 from .models import UserAsistente, Dependencia, UserCoordinador
 import random
 import string
@@ -10,8 +11,8 @@ import string
 def generar_cadena_alternante():
   """Genera una cadena aleatoria de 6 caracteres, alternando números y letras."""
 
-  numeros = ''.join(random.choice(string.digits) for _ in range(3))
-  letras = ''.join(random.choice(string.ascii_lowercase) for _ in range(3))
+  numeros = ''.join(random.choice(string.digits) for _ in range(4))
+  letras = ''.join(random.choice(string.ascii_lowercase) for _ in range(4))
 
   return numeros + letras
 
@@ -20,7 +21,6 @@ class UsuariosForm(forms.ModelForm):
     first_name = forms.CharField(label='Nombre')
     last_name = forms.CharField(label='Apellido')
     email = forms.CharField(label='Correo Electronico')
-    #password = forms.CharField(widget=forms.PasswordInput(render_value=False), label='Password')
 
     class Meta:
         model = UserAsistente
@@ -103,11 +103,18 @@ class UsuariosForm(forms.ModelForm):
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name'],
             email=self.cleaned_data['email'],
-            password=str(generar_cadena_alternante())
+            password=generar_cadena_alternante()
         )
+        # Agregar al usuario al grupo por defecto, por ejemplo "Asistentes"
+        # Reemplaza con el nombre correcto del grupo
+        grupo_por_defecto = Group.objects.get(name='asistente')
+        user.groups.add(grupo_por_defecto)  # Añadir al grupo
+
+        # Crear la instancia del modelo asociado (UserAsistente) con la relación al usuario de Django
         instance = super().save(commit=False)
         instance.user = user
-        instance.save()
+        if commit:
+            instance.save()
         return instance
 
 

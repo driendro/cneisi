@@ -1,19 +1,40 @@
 from django.contrib import messages
+from django.conf import settings
+from django.core.mail import EmailMultiAlternatives
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, render
+from django.template.loader import get_template
 from django.views import View
 from django.views.generic import TemplateView, DeleteView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
-
 from tablib import Dataset
+import threading
 
 # Create your views here.
 from .models import UserAsistente, UserCoordinador
-from .forms import UsuariosForm, AsistenteUpdateForm
+from .forms import UsuariosForm, AsistenteUpdateForm,generar_cadena_alternante
 from .mixins import GroupRequiredMixin
 from .resources import AsistenteResource, CoordinadorResource
+
+def create_email(user_mail, subject, template_name, context, request):
+    template = get_template(template_name)
+    content = template.render(context=context, request=request)
+
+    message = EmailMultiAlternatives(
+        subject=subject,
+        body='',
+        from_email=settings.EMAIL_HOST_USER,
+        to=[
+            user_mail
+        ],
+        cc=[]
+    )
+    
+    message.attach_alternative(content, 'text/html')
+    return message
+
 
 class PerfilHome(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
@@ -21,10 +42,16 @@ class PerfilHome(LoginRequiredMixin, View):
             if request.user.groups.filter(name='coordinador').exists():
                 return redirect('coordinador_home')
             else:
-                return render(request, 'usuarios/usuario_home.html')
+                return redirect('asistente_home')
         else:
             return redirect('home')
 
+
+###############################Coordinador########################################################################################################################
+###############################Coordinador########################################################################################################################
+###############################Coordinador########################################################################################################################
+###############################Coordinador########################################################################################################################
+###############################Coordinador########################################################################################################################
 
 class InscriptosList(GroupRequiredMixin, ListView):
     model = UserAsistente
@@ -42,7 +69,7 @@ class UsuariosCreateView(GroupRequiredMixin, CreateView):
     model = UserAsistente
     form_class = UsuariosForm
     template_name = 'usuarios/create_uno.html'
-    success_url = 'coordinador_home'
+    success_url = reverse_lazy('coordinador_inscribir_uno')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -50,6 +77,31 @@ class UsuariosCreateView(GroupRequiredMixin, CreateView):
         context['title'] = 'Registro de Usuario'
         return context
     
+    def form_valid(self, form):
+        # Llamar al método save del formulario para obtener la instancia y la contraseña
+        nombre= form.cleaned_data.get('first_name')
+        correo= form.cleaned_data.get('email')
+        dependencia = form.cleaned_data.get('dependencia')
+        username = form.cleaned_data.get('username')
+
+        # Crear y enviar el correo
+        email = create_email(
+            user_mail=correo,
+            subject='Confirmación de Inscripción al CNEISI',
+            template_name='correos/inscripcion.html',
+            context={
+                'usuario': username,  # Enviar el nombre de usuario
+                'nombre': nombre,  # Enviar el nombre del usuario
+                'dependencia': dependencia
+            },
+            request=self.request
+        )
+        # Enviar el correo en un hilo separado para no bloquear la respuesta
+        thread = threading.Thread(target=email.send)
+        thread.start()
+
+        return super().form_valid(form)
+        
 
 def import_users(request):
     if request.method == 'POST':
@@ -111,3 +163,19 @@ class DetalleAsistente(GroupRequiredMixin, DetailView):
     group_name = 'coordinador'
     template_name = 'usuarios/view_uno.html'  # Template que usaremos
     context_object_name = 'user_asistente'  # Nombre con el que accederás al objeto en la plantilla
+    
+
+
+
+###############################Asistente########################################################################################################################
+###############################Asistente########################################################################################################################
+###############################Asistente########################################################################################################################
+###############################Asistente########################################################################################################################
+###############################Asistente########################################################################################################################
+
+class AsistenteHome(GroupRequiredMixin, TemplateView):
+    model = UserAsistente
+    group_name = 'asistente'
+    template_name = 'asistente/home.html'  # Template que usaremos
+    # Nombre con el que accederás al objeto en la plantilla
+    context_object_name = 'user_asistente'

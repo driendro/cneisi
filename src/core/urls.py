@@ -18,8 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from core.views import PerfilHome, InscriptosList, UsuariosCreateView, import_users, EliminarAsistente, EditarAsistente, DetalleAsistente
-
+from core.views import PerfilHome, InscriptosList, UsuariosCreateView, import_users, EliminarAsistente, EditarAsistente, DetalleAsistente, AsistenteHome
 
 urlpatterns = [
     path('home', PerfilHome.as_view(), name='perfil_home'),
@@ -34,4 +33,9 @@ urlpatterns = [
          name='coordinador_eliminar_asistente'),
     path('coordinador/user/<int:pk>/ver', DetalleAsistente.as_view(),
          name='coordinador_ver_asistente'),
+    
+    ############################Assitente######################################
+    ############################Assitente######################################
+    
+    path('asistente', AsistenteHome.as_view(), name='asistente_home')
 ]

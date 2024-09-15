@@ -71,7 +71,12 @@ class Usuarios(models.Model):
 class UserAsistente(Usuarios):
     dependencia = models.ForeignKey(
         'Dependencia', on_delete=models.CASCADE)
-    
+
+    def delete(self, *args, **kwargs):
+        # Eliminar el usuario asociado antes de eliminar el asistente
+        self.user.delete()
+        super().delete(*args, **kwargs)
+
     def __str__(self):
         return '{}, {}'.format(self.user.last_name.upper(), self.user.first_name.title())
 
@@ -85,6 +90,11 @@ class UserCoordinador(Usuarios):
     dependencia = models.ManyToManyField(
         'Dependencia')
 
+    def delete(self, *args, **kwargs):
+        # Eliminar el usuario asociado antes de eliminar el asistente
+        self.user.delete()
+        super().delete(*args, **kwargs)
+        
     def __str__(self):
         return '{}, {}'.format(self.user.last_name.upper(), self.user.first_name.title())
 

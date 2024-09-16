@@ -49,7 +49,7 @@ class TallesRemeras(models.Model):
 class Usuarios(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     documento = models.IntegerField(unique=True)
-    cuit = models.IntegerField()
+    cuit = models.PositiveBigIntegerField()
     fecha_nacimiento = models.DateField()
     telefono_personal = PhoneNumberField()
     telefono_emergencia = PhoneNumberField()

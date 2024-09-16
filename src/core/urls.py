@@ -37,5 +37,5 @@ urlpatterns = [
     ############################Assitente######################################
     ############################Assitente######################################
     
-    path('asistente', AsistenteHome.as_view(), name='asistente_home')
+    #path('asistente', AsistenteHome.as_view(), name='asistente_home')
 ]

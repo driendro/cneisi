@@ -87,8 +87,7 @@ class UserAsistente(Usuarios):
 
 
 class UserCoordinador(Usuarios):
-    dependencia = models.ManyToManyField(
-        'Dependencia')
+    dependencia = models.ManyToManyField('Dependencia')
 
     def delete(self, *args, **kwargs):
         # Eliminar el usuario asociado antes de eliminar el asistente
@@ -115,5 +114,11 @@ class Actividad(models.Model):
     tipo = models.CharField(max_length=150)
     nombre = models.CharField(max_length=150)
     descripcion = models.TextField()
+    hora_inicio = models.TimeField(default='00:00')
+    hora_final = models.TimeField(default='00:00')
     orador = models.CharField(max_length=100)
     aula = models.ForeignKey('Aula', related_name='AulaActividad', on_delete=models.CASCADE)
+    portada = models.ImageField(default='#')
+    
+    def __str__(self):
+        return '{} ({})'.format(self.nombre.upper(), self.aula.nombre)

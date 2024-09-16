@@ -33,7 +33,6 @@ class UsuariosForm(forms.ModelForm):
             'fecha_nacimiento',
             'telefono_personal',
             'telefono_emergencia',
-            #'caracter',
             'dependencia',
             'grupo_sangineo',
             'regimen_comida',
@@ -53,7 +52,6 @@ class UsuariosForm(forms.ModelForm):
             'fecha_nacimiento': 'Fecha de nacimiento',
             'telefono_personal': 'Telefono Personal (de la forma +541223456789)',
             'telefono_emergencia': 'Telefono de emergencia (de la forma +541223456789)',
-            #'caracter': 'En ca',
             'dependencia': 'Dependencia e',
             'grupo_sangineo': 'Grupo y Factor sanguineo',
             'regimen_comida': 'Regimen alimenticio',
@@ -70,9 +68,6 @@ class UsuariosForm(forms.ModelForm):
             'fecha_nacimiento': forms.DateInput(attrs={
                 'type': 'date', 'placeholder': 'dd-mm-yyyy (DOB)', 'class': 'form-control'}
             ),
-            #'dependencia': forms.RadioSelect(attrs={
-            #    'type': 'select', 'class': 'form-control'}
-            #),
             'regimen_comida_otro': forms.Textarea(attrs={
                 'type': 'text', 'class': 'form-control'}
             ),
@@ -83,15 +78,14 @@ class UsuariosForm(forms.ModelForm):
                 'type': 'text', 'class': 'form-control'}
             )
         }
-
+        
     def __init__(self, *args, **kwargs):
         # Captura el usuario pasado como argumento
         user = kwargs.pop('user', None)
         super(UsuariosForm, self).__init__(*args, **kwargs)
         if user:
             # Filtra las dependencias por el usuario logueado
-            self.fields['dependencia'].queryset = Dependencia.objects.filter(
-                usuarios=user)
+            self.fields['dependencia'].queryset = UserCoordinador.objects.get(user=user).dependencia.all()
     
     def clean_caracter(self):
         caracter = 'Asistente'
@@ -172,9 +166,6 @@ class AsistenteUpdateForm(forms.ModelForm):
                 attrs={'type': 'date', 'class': 'form-control'},
                 format='%Y-%m-%d'
             ),
-            # 'dependencia': forms.RadioSelect(attrs={
-            #    'type': 'select', 'class': 'form-control'}
-            # ),
             'regimen_comida_otro': forms.Textarea(attrs={
                 'type': 'text', 'class': 'form-control'}
             ),
@@ -185,6 +176,15 @@ class AsistenteUpdateForm(forms.ModelForm):
                 'type': 'text', 'class': 'form-control'}
             )
         }
+        
+    def __init__(self, *args, **kwargs):
+        # Captura el usuario pasado como argumento
+        user = kwargs.pop('user', None)
+        super(UsuariosForm, self).__init__(*args, **kwargs)
+        if user:
+            # Filtra las dependencias por el usuario logueado
+            self.fields['dependencia'].queryset = UserCoordinador.objects.get(
+                user=user).dependencia.all()
         
     def save(self, commit=True):
         instance = super().save(commit=False)

@@ -76,6 +76,13 @@ class UsuariosCreateView(GroupRequiredMixin, CreateView):
         # Agrega un título para la página
         context['title'] = 'Registro de Usuario'
         return context
+
+    def get_form_kwargs(self):
+        # Obtener los kwargs originales
+        kwargs = super(UsuariosCreateView, self).get_form_kwargs()
+        # Añadir el usuario al diccionario de kwargs
+        kwargs['user'] = self.request.user
+        return kwargs
     
     def form_valid(self, form):
         # Llamar al método save del formulario para obtener la instancia y la contraseña
@@ -149,6 +156,13 @@ class EditarAsistente(GroupRequiredMixin, UpdateView):
         # Agrega un título para la página
         context['title'] = 'Actualizar datos del Asistente'
         return context
+    
+    def get_form_kwargs(self):
+        # Obtener los kwargs originales
+        kwargs = super(UsuariosCreateView, self).get_form_kwargs()
+        # Añadir el usuario al diccionario de kwargs
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class EliminarAsistente(GroupRequiredMixin, DeleteView):

@@ -34,7 +34,8 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
 
-#CSRF_TRUSTED_ORIGINS = ['https://*cneisi.frlp.utn.edu.ar', 'https://*.127.0.0.1']
+if DEBUG == False:
+    CSRF_TRUSTED_ORIGINS = ['https://*cneisi.frlp.utn.edu.ar', 'https://*.127.0.0.1']
 
 SESSION_COOKIE_AGE = 60*60*1  # 1 hs
 

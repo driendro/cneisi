@@ -1,41 +1,39 @@
 {% extends 'base.html' %} {% load django_bootstrap5 %} {% load bootstrap_icons %} {% block content %}
 
-<div class="container">
+<div class="container py-4">
   <div class="row">
-  {% if actividades_inscritas %}
-    <div class="card-group">
-      {% for actividad in actividades_inscritas %}
-      <div class="card" style="max-width: 340px">
-        <!-- Contenedor para la imagen -->
-        <div class="card-img-container">
-          <img
-            src="{{ actividad.portada.url }}"
-            class="card-img-top"
-            alt="{{ actividad.nombre }}"
-          />
-        </div>
-
-        <div class="card-body">
-          <!-- Título de la actividad -->
-          <h4 class="card-title">{{ actividad.nombre }}</h5>
-          <p><strong>Orador:</strong> {{ actividad.orador }}</br>
-          <strong>{{ actividad.hora_inicio }} - {{ actividad.hora_final }}</strong></p>
-          <!-- Descripción completa de la actividad -->
-          <p class="card-text">{{ actividad.descripcion }}</p>
-
-          <!-- Detalles de la actividad -->
-          <p><strong>Aula:</strong> {{ actividad.aula.nombre }}</p>
-          <!-- Botón de inscripción o desinscripción -->
-          <!-- Usuario ya inscrito -->
-          <form action="{% url 'actividad_desinscribirse' actividad.id %}" method="post">
+{% if actividades_inscritas %}
+  <h1 class='text-center'>Actividades en las que estas anotado</h1>
+  <div class="table-responsive">
+    <table class="table table-cover">
+      <thead>
+        <tr>
+          <th>Actividad</th>
+          <th>Horario</th>
+          <th>Aula</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for actividad in actividades_inscritas %}
+        <tr>
+          <td style="vertical-align: middle;">{{ actividad.nombre|truncatechars:80 }}</td>
+          <td style="vertical-align: middle;">{{ actividad.hora_inicio }} - {{ actividad.hora_final }}</td>
+          <td style="vertical-align: middle;">{{ actividad.aula.nombre }}</td>
+          <td style="vertical-align: middle;">
+            <form action="{% url 'actividad_desinscribirse' actividad.id %}" method="post">
               {% csrf_token %}
               <button type="submit" class="btn btn-danger">Desinscribirse</button>
-          </form>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  {% elif actividades_no_inscritas %}
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endif %}
+  {% if actividades_no_inscritas %}
+  <h1 class='text-center'>Actividades disponibles</h1>
     <div class="card-group">
       {% for actividad in actividades_no_inscritas %}
       <div class="card" style="max-width: 340px">
@@ -50,11 +48,11 @@
 
         <div class="card-body">
           <!-- Título de la actividad -->
-          <h4 class="card-title">{{ actividad.nombre }}</h5>
+          <h4 class="card-title">{{ actividad.nombre|truncatewords:10 }}</h5>
           <p><strong>Orador:</strong> {{ actividad.orador }}</br>
           <strong>{{ actividad.hora_inicio }} - {{ actividad.hora_final }}</strong></p>
           <!-- Descripción completa de la actividad -->
-          <p class="card-text">{{ actividad.descripcion }}</p>
+          <p class="card-text">{{ actividad.descripcion|truncatechars:100 }}</p>
 
           <!-- Detalles de la actividad -->
           <p><strong>Aula:</strong> {{ actividad.aula.nombre }}</p>
@@ -71,5 +69,32 @@
     {% endif %}
   </div>
 </div>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 {% endblock %}

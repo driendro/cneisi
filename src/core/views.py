@@ -15,7 +15,7 @@ from tablib import Dataset
 import threading
 
 # Create your views here.
-from .models import UserAsistente, UserCoordinador, Actividad
+from .models import UserAsistente, UserCoordinador, Actividad, Dependencia
 from .forms import UsuariosForm, AsistenteUpdateForm,generar_cadena_alternante
 from .mixins import GroupRequiredMixin
 from .resources import AsistenteResource, CoordinadorResource
@@ -94,9 +94,9 @@ class UsuariosCreateView(GroupRequiredMixin, CreateView):
         # Llamar al método save del formulario para obtener la instancia y la contraseña
         nombre= form.cleaned_data.get('first_name')
         correo= form.cleaned_data.get('email')
-        dependencia = form.cleaned_data.get('dependencia')
-        username = form.cleaned_data.get('username')
-        print(form.cleaned_data)
+        dependencia = form.cleaned_data.get('dependencia').nombre_largo
+        username = form.cleaned_data.get('documento')
+        print(dependencia)
 
         # Crear y enviar el correo
         email = create_email(
@@ -163,13 +163,6 @@ class EditarAsistente(GroupRequiredMixin, UpdateView):
         # Agrega un título para la página
         context['title'] = 'Actualizar datos del Asistente'
         return context
-    
-    def get_form_kwargs(self):
-        # Obtener los kwargs originales
-        kwargs = super(UsuariosCreateView, self).get_form_kwargs()
-        # Añadir el usuario al diccionario de kwargs
-        kwargs['user'] = self.request.user
-        return kwargs
 
 
 class EliminarAsistente(GroupRequiredMixin, DeleteView):

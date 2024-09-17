@@ -109,7 +109,7 @@ class UserCoordinador(Usuarios):
 
 
 class Aula(models.Model):
-    nombre = models.CharField(max_length=20)
+    nombre = models.CharField(max_length=30)
     cupo = models.IntegerField(default=0)  # 0 significa que no hay límite
 
     def __str__(self):

@@ -201,7 +201,6 @@ class AsistenteUpdateForm(forms.ModelForm):
             user.last_name = user.last_name[0]
             user.email = user.email[0]
             user.save(update_fields=['first_name','last_name', 'email', 'username'])
-            print('existe##################################')
         
         else:
             # Si el usuario no existe, lo creamos

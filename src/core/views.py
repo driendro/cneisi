@@ -39,10 +39,14 @@ def create_email(user_mail, subject, template_name, context, request):
 class PerfilHome(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            if request.user.groups.filter(name='coordinador').exists():
+            if request.user.is_staff:
+                return redirect('admin:index')
+            elif request.user.groups.filter(name='coordinador').exists():
                 return redirect('coordinador_home')
-            else:
+            elif request.user.groups.filter(name='asistente').exists():
                 return redirect('asistente_home')
+            else:
+                return redirect('home')
         else:
             return redirect('home')
 
@@ -90,6 +94,7 @@ class UsuariosCreateView(GroupRequiredMixin, CreateView):
         correo= form.cleaned_data.get('email')
         dependencia = form.cleaned_data.get('dependencia')
         username = form.cleaned_data.get('username')
+        print(form.cleaned_data)
 
         # Crear y enviar el correo
         email = create_email(

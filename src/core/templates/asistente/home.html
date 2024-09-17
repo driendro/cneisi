@@ -67,9 +67,15 @@
       {% endfor %}
     </div>
     {% endif %}
+      {% if not actividades_no_inscritas and not actividades_inscritas %}
+        <h3 class='text-center'>En este sitio se mostraran las actividades propuestas por la Regional</h1>
+        <h5 class='text-center'>Actualmente estamos teminando de definir la grilla de las actividades.</h5>
+    {% endif %}
   </div>
 </div>
 
+{% comment %}
+    
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
   Launch demo modal
@@ -95,6 +101,7 @@
     </div>
   </div>
 </div>
+{% endcomment %}
 
 
 {% endblock %}

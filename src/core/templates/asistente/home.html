@@ -1,103 +1,75 @@
 {% extends 'base.html' %} {% load django_bootstrap5 %} {% load bootstrap_icons %} {% block content %}
 
 <div class="container">
-    <div class="row">
-        <div class="card-group">
-            <div class="card">
-                <img src="#" class="card-img-top" alt="#">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#modal1">Ver más</button>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </div>
-            </div>
-
-            <div class="card">
-                <img src="#" class="card-img-top" alt="#">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#modal2">Ver más</button>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </div>
-            </div>
-
-            <div class="card">
-                <img src="#" class="card-img-top" alt="#">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#modal3">Ver más</button>
-                </div>
-                <div class="card-footer">
-                    <small class="text-muted">Last updated 3 mins ago</small>
-                </div>
-            </div>
+  <div class="row">
+  {% if actividades_inscritas %}
+    <div class="card-group">
+      {% for actividad in actividades_inscritas %}
+      <div class="card" style="max-width: 340px">
+        <!-- Contenedor para la imagen -->
+        <div class="card-img-container">
+          <img
+            src="{{ actividad.portada.url }}"
+            class="card-img-top"
+            alt="{{ actividad.nombre }}"
+          />
         </div>
-    </div>
-</div>
 
-<!-- Modals -->
-<div class="modal fade" id="modal1" tabindex="-1" role="dialog" aria-labelledby="modal1Label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal1Label">Card 1 - Extended Content</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>This is the extended content for the first card. It provides more detailed information.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
-</div>
+        <div class="card-body">
+          <!-- Título de la actividad -->
+          <h4 class="card-title">{{ actividad.nombre }}</h5>
+          <p><strong>Orador:</strong> {{ actividad.orador }}</br>
+          <strong>{{ actividad.hora_inicio }} - {{ actividad.hora_final }}</strong></p>
+          <!-- Descripción completa de la actividad -->
+          <p class="card-text">{{ actividad.descripcion }}</p>
 
-<div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="modal2Label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal2Label">Card 2 - Extended Content</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>This is the extended content for the second card.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+          <!-- Detalles de la actividad -->
+          <p><strong>Aula:</strong> {{ actividad.aula.nombre }}</p>
+          <!-- Botón de inscripción o desinscripción -->
+          <!-- Usuario ya inscrito -->
+          <form action="{% url 'actividad_desinscribirse' actividad.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Desinscribirse</button>
+          </form>
         </div>
+      </div>
+      {% endfor %}
     </div>
-</div>
+  {% elif actividades_no_inscritas %}
+    <div class="card-group">
+      {% for actividad in actividades_no_inscritas %}
+      <div class="card" style="max-width: 340px">
+        <!-- Contenedor para la imagen -->
+        <div class="card-img-container">
+          <img
+            src="{{ actividad.portada.url }}"
+            class="card-img-top"
+            alt="{{ actividad.nombre }}"
+          />
+        </div>
 
-<div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modal3Label" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal3Label">Card 3 - Extended Content</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>This is the extended content for the third card.</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+        <div class="card-body">
+          <!-- Título de la actividad -->
+          <h4 class="card-title">{{ actividad.nombre }}</h5>
+          <p><strong>Orador:</strong> {{ actividad.orador }}</br>
+          <strong>{{ actividad.hora_inicio }} - {{ actividad.hora_final }}</strong></p>
+          <!-- Descripción completa de la actividad -->
+          <p class="card-text">{{ actividad.descripcion }}</p>
+
+          <!-- Detalles de la actividad -->
+          <p><strong>Aula:</strong> {{ actividad.aula.nombre }}</p>
+          <!-- Botón de inscripción o desinscripción -->
+                    <!-- Usuario no inscrito -->
+          <form action="{% url 'actividad_inscribirse' actividad.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-primary">Inscribirse</button>
+          </form>
         </div>
+      </div>
+      {% endfor %}
     </div>
+    {% endif %}
+  </div>
 </div>
 
 {% endblock %}

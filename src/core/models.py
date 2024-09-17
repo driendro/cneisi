@@ -1,3 +1,8 @@
+from datetime import date
+import os
+from uuid import uuid4
+from django.forms import ValidationError
+from django.utils.text import slugify
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import User
@@ -102,13 +107,24 @@ class UserCoordinador(Usuarios):
         verbose_name = 'Coordinador'
         verbose_name_plural = 'Coordinadores'
 
+
 class Aula(models.Model):
     nombre = models.CharField(max_length=20)
-    cupo = models.IntegerField()
-    
-    def __str__(self):
-        return '{} ({})'.format(self.nombre.upper(), self.cupo)
+    cupo = models.IntegerField(default=0)  # 0 significa que no hay límite
 
+    def __str__(self):
+        return '{} ({})'.format(self.nombre.upper(), "Ilimitado" if self.cupo == 0 else self.cupo)
+
+
+def generar_ruta_unica(instance, filename):
+    # Extraer la extensión del archivo
+    ext = filename.split('.')[-1]
+    # Crear un nombre de archivo único usando UUID
+    filename = '{}.{}'.format(uuid4(),ext)
+    # Generar una carpeta con el tipo y nombre de la actividad
+    actividad_nombre = slugify(instance.nombre)
+    # Devolver la ruta completa donde se almacenará la imagen
+    return os.path.join('portadas', actividad_nombre, filename)
 
 class Actividad(models.Model):
     tipo = models.CharField(max_length=150)
@@ -118,7 +134,28 @@ class Actividad(models.Model):
     hora_final = models.TimeField(default='00:00')
     orador = models.CharField(max_length=100)
     aula = models.ForeignKey('Aula', related_name='AulaActividad', on_delete=models.CASCADE)
-    portada = models.ImageField(default='#')
+    portada = models.ImageField(upload_to=generar_ruta_unica, default='#')
+    asistentes = models.ManyToManyField(UserAsistente, blank=True)
     
     def __str__(self):
         return '{} ({})'.format(self.nombre.upper(), self.aula.nombre)
+
+    def inscribir_asistente(self, user_asistente):
+        # Verificar si el aula tiene cupo limitado
+        if self.aula.cupo > 0:
+            # Contar los asistentes ya inscritos
+            inscritos = self.asistentes.count()
+            if inscritos >= self.aula.cupo:
+                # Si el número de inscritos es mayor o igual al cupo, lanzar una excepción
+                raise ValidationError('El cupo máximo de esta actividad ha sido alcanzado.')
+
+        # Agregar el asistente si el cupo no ha sido alcanzado o es ilimitado (0)
+        self.asistentes.add(user_asistente)
+
+    def cupo_disponible(self):
+        # Si el cupo es 0, significa que es ilimitado
+        if self.aula.cupo == 0:
+            return "Cupo ilimitado"
+        else:
+            # Devolver el número de lugares restantes
+            return self.aula.cupo - self.asistente.count()

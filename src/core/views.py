@@ -1,9 +1,11 @@
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponseNotAllowed
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
 from django.views import View
 from django.views.generic import TemplateView, DeleteView, DetailView
@@ -13,7 +15,7 @@ from tablib import Dataset
 import threading
 
 # Create your views here.
-from .models import UserAsistente, UserCoordinador
+from .models import UserAsistente, UserCoordinador, Actividad
 from .forms import UsuariosForm, AsistenteUpdateForm,generar_cadena_alternante
 from .mixins import GroupRequiredMixin
 from .resources import AsistenteResource, CoordinadorResource
@@ -195,6 +197,47 @@ class DetalleAsistente(GroupRequiredMixin, DetailView):
 class AsistenteHome(GroupRequiredMixin, TemplateView):
     model = UserAsistente
     group_name = 'asistente'
-    template_name = 'asistente/home.html'  # Template que usaremos
-    # Nombre con el que accederás al objeto en la plantilla
+    template_name = 'asistente/home.html'
     context_object_name = 'user_asistente'
+
+    def get_context_data(self, **kwargs):
+        # Obtener el contexto base
+        context = super().get_context_data(**kwargs)
+        # Obtener el usuario autenticado
+        user = self.request.user
+        # Obtener el objeto UserAsistente correspondiente al usuario autenticado
+        asistente = UserAsistente.objects.get(user=user)
+        # Obtener todas las actividades
+        actividades = Actividad.objects.all()
+        # Obtener las actividades en las que el asistente está inscrito desde el modelo Actividad
+        actividades_inscritas = Actividad.objects.filter(asistentes=asistente)
+        # Filtrar actividades no inscritas
+        actividades_no_inscritas = actividades.exclude(id__in=actividades_inscritas.values_list('id', flat=True))
+        print(actividades_inscritas)
+        print(actividades_no_inscritas)
+        # Agregar al contexto todas las actividades y las inscritas
+        context['actividades_no_inscritas'] = actividades_no_inscritas
+        context['actividades_inscritas'] = actividades_inscritas
+        return context
+
+
+#@login_required
+def inscribirse(request, actividad_id):
+    if request.method == 'POST':
+        actividad = get_object_or_404(Actividad, id=actividad_id)
+        user_asistente = request.user.userasistente
+        if user_asistente not in actividad.asistentes.all():
+            actividad.asistentes.add(user_asistente)
+        return redirect('asistente_home')  # Redirige a la vista deseada
+    return HttpResponseNotAllowed(['POST'])
+
+
+@login_required
+def desinscribirse(request, actividad_id):
+    if request.method == 'POST':
+        actividad = get_object_or_404(Actividad, id=actividad_id)
+        user_asistente = request.user.userasistente
+        if user_asistente in actividad.asistentes.all():
+            actividad.asistentes.remove(user_asistente)
+        return redirect('asistente_home')  # Redirige a la vista deseada
+    return HttpResponseNotAllowed(['POST'])

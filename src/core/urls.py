@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
 
-from core.views import PerfilHome, InscriptosList, UsuariosCreateView, import_users, EliminarAsistente, EditarAsistente, DetalleAsistente, AsistenteHome
+from core.views import PerfilHome, InscriptosList, UsuariosCreateView, import_users, EliminarAsistente, EditarAsistente, DetalleAsistente, AsistenteHome, inscribirse, desinscribirse
 
 urlpatterns = [
     path('home', PerfilHome.as_view(), name='perfil_home'),
@@ -37,5 +37,9 @@ urlpatterns = [
     ############################Assitente######################################
     ############################Assitente######################################
     
-    #path('asistente', AsistenteHome.as_view(), name='asistente_home')
+    path('asistente', AsistenteHome.as_view(), name='asistente_home'),
+    path('inscribirse/<int:actividad_id>/',
+         inscribirse, name='actividad_inscribirse'),
+    path('desinscribirse/<int:actividad_id>/',
+         desinscribirse, name='actividad_desinscribirse')
 ]

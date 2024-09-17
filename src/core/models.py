@@ -122,7 +122,7 @@ def generar_ruta_unica(instance, filename):
     # Crear un nombre de archivo único usando UUID
     filename = '{}.{}'.format(uuid4(),ext)
     # Generar una carpeta con el tipo y nombre de la actividad
-    actividad_nombre = slugify(instance.nombre)
+    actividad_nombre = slugify(instance.id)
     # Devolver la ruta completa donde se almacenará la imagen
     return os.path.join('portadas', actividad_nombre, filename)
 

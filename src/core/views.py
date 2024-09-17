@@ -213,8 +213,6 @@ class AsistenteHome(GroupRequiredMixin, TemplateView):
         actividades_inscritas = Actividad.objects.filter(asistentes=asistente)
         # Filtrar actividades no inscritas
         actividades_no_inscritas = actividades.exclude(id__in=actividades_inscritas.values_list('id', flat=True))
-        print(actividades_inscritas)
-        print(actividades_no_inscritas)
         # Agregar al contexto todas las actividades y las inscritas
         context['actividades_no_inscritas'] = actividades_no_inscritas
         context['actividades_inscritas'] = actividades_inscritas

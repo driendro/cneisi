@@ -57,11 +57,18 @@
           <!-- Detalles de la actividad -->
           <p><strong>Aula:</strong> {{ actividad.aula.nombre }}</p>
           <!-- Botón de inscripción o desinscripción -->
-                    <!-- Usuario no inscrito -->
-          <form action="{% url 'actividad_inscribirse' actividad.id %}" method="post">
+          {% if actividad.habilitada %}
+            <!-- Usuario no inscrito -->
+            <form action="{% url 'actividad_inscribirse' actividad.id %}" method="post">
               {% csrf_token %}
               <button type="submit" class="btn btn-primary">Inscribirse</button>
-          </form>
+            </form>
+            {% else %}
+            <form action="#" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-secondari">Cupo superado</button>
+            </form>
+            {% endif %}
         </div>
       </div>
       {% endfor %}

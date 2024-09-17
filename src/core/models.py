@@ -6,6 +6,8 @@ from django.utils.text import slugify
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 CARACTER_CHOICES = {
     'asistente': 'Asistente',
@@ -33,6 +35,7 @@ REGIMEN_COMIDA_CHOICES = {
 }
 
 # Create your models here.
+
 class Dependencia(models.Model):
     nombre_largo = models.CharField(max_length=100)
     nombre_corto = models.CharField(max_length=10)
@@ -136,6 +139,7 @@ class Actividad(models.Model):
     aula = models.ForeignKey('Aula', related_name='AulaActividad', on_delete=models.CASCADE)
     portada = models.ImageField(upload_to=generar_ruta_unica, default='#')
     asistentes = models.ManyToManyField(UserAsistente, blank=True)
+    habilitada = models.BooleanField(default=True)
     
     def __str__(self):
         return '{} ({})'.format(self.nombre.upper(), self.aula.nombre)
@@ -159,3 +163,4 @@ class Actividad(models.Model):
         else:
             # Devolver el número de lugares restantes
             return self.aula.cupo - self.asistente.count()
+

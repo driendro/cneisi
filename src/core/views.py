@@ -4,7 +4,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseNotAllowed
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import get_template
 from django.views import View
@@ -20,9 +20,9 @@ from .forms import UsuariosForm, AsistenteUpdateForm,generar_cadena_alternante
 from .mixins import GroupRequiredMixin
 from .resources import AsistenteResource, CoordinadorResource
 
-def create_email(user_mail, subject, template_name, context, request):
+def create_email(user_mail, subject, template_name, context):
     template = get_template(template_name)
-    content = template.render(context=context, request=request)
+    content = template.render(context=context)
 
     message = EmailMultiAlternatives(
         subject=subject,
@@ -37,12 +37,17 @@ def create_email(user_mail, subject, template_name, context, request):
     message.attach_alternative(content, 'text/html')
     return message
 
+###############################Publicas########################################################################################################################
+###############################Publicas########################################################################################################################
+###############################Publicas########################################################################################################################
+###############################Publicas########################################################################################################################
+###############################Publicas########################################################################################################################
 
 class PerfilHome(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             if request.user.is_staff:
-                return redirect('admin:index')
+                return redirect('staff_home')
             elif request.user.groups.filter(name='coordinador').exists():
                 return redirect('coordinador_home')
             elif request.user.groups.filter(name='asistente').exists():
@@ -91,28 +96,27 @@ class UsuariosCreateView(GroupRequiredMixin, CreateView):
         return kwargs
     
     def form_valid(self, form):
-        # Llamar al método save del formulario para obtener la instancia y la contraseña
-        nombre= form.cleaned_data.get('first_name')
-        correo= form.cleaned_data.get('email')
-        dependencia = form.cleaned_data.get('dependencia').nombre_largo
-        username = form.cleaned_data.get('documento')
-        print(dependencia)
-
-        # Crear y enviar el correo
-        email = create_email(
-            user_mail=correo,
-            subject='Confirmación de Inscripción al CNEISI',
-            template_name='correos/inscripcion.html',
-            context={
-                'usuario': username,  # Enviar el nombre de usuario
-                'nombre': nombre,  # Enviar el nombre del usuario
-                'dependencia': dependencia
-            },
-            request=self.request
-        )
-        # Enviar el correo en un hilo separado para no bloquear la respuesta
-        thread = threading.Thread(target=email.send)
-        thread.start()
+        ## Llamar al método save del formulario para obtener la instancia y la contraseña
+        #nombre= form.cleaned_data.get('first_name')
+        #correo= form.cleaned_data.get('email')
+        #dependencia = form.cleaned_data.get('dependencia').nombre_largo
+        #username = form.cleaned_data.get('documento')
+        #
+        ## Crear y enviar el correo
+        #email = create_email(
+        #    user_mail=correo,
+        #    subject='Confirmación de Inscripción al CNEISI',
+        #    template_name='correos/inscripcion.html',
+        #    context={
+        #        'usuario': username,  # Enviar el nombre de usuario
+        #        'nombre': nombre,  # Enviar el nombre del usuario
+        #        'dependencia': dependencia
+        #    },
+        #    request=self.request
+        #)
+        ## Enviar el correo en un hilo separado para no bloquear la respuesta
+        #thread = threading.Thread(target=email.send)
+        #thread.start()
 
         return super().form_valid(form)
         
@@ -240,3 +244,122 @@ def desinscribirse(request, actividad_id):
             actividad.asistentes.remove(user_asistente)
         return redirect('asistente_home')  # Redirige a la vista deseada
     return HttpResponseNotAllowed(['POST'])
+
+
+############################### Django_Staff ########################################################################################################################
+############################### Django_Staff ########################################################################################################################
+############################### Django_Staff ########################################################################################################################
+############################### Django_Staff ########################################################################################################################
+############################### Django_Staff ########################################################################################################################
+
+class StaffHome(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = Actividad
+    template_name = 'admin/home.html'
+    context_object_name = 'actividades'
+    
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    
+def abir_inscripciones(request):
+    if request.user.is_authenticated and request.user.is_staff and request.method == 'POST':
+        thread = threading.Thread(
+            target=lambda: Actividad.objects.all().update(inscripcion=True))
+        thread.start()
+        return redirect('staff_home')  # Redirige a la vista deseada
+    else:
+        return redirect('home')  # Redirige a la vista deseada
+
+
+def cerrar_inscripciones(request):
+    if request.user.is_authenticated and request.user.is_staff and request.method == 'POST':
+        Actividad.objects.all().update(inscripcion=False)
+        return redirect('staff_home')  # Redirige a la vista deseada
+    else:
+        return redirect('home')  # Redirige a la vista deseada
+
+
+def envio_correos_inscripcion(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        # Llamar al método save del formulario para obtener la instancia y la contraseña
+        asistentes = UserAsistente.objects.all()
+        for asistente in asistentes:
+            nombre = asistente.user.first_name
+            correo = asistente.user.email
+            dependencia = asistente.dependencia.nombre_largo
+            username = asistente.user.username
+            password = asistente.documento
+    
+            # Crear y enviar el correo
+            email = create_email(
+                user_mail=correo,
+                subject='Confirmación de Inscripción al CNEISI',
+                template_name='correos/inscripcion.html',
+                context={
+                    'usuario': username,  # Enviar el nombre de usuario
+                    'nombre': nombre,  # Enviar el nombre del usuario
+                    'dependencia': dependencia,
+                    'password': password,
+                    'url': 'https://cneisi.frlp.utn.edu.ar/login',
+                },
+            )
+            # Enviar el correo en un hilo separado para no bloquear la respuesta
+            thread = threading.Thread(target=email.send)
+            thread.start()
+        return redirect('staff_home')  # Redirige a la vista deseada
+    else:
+        return redirect('home')  # Redirige a la vista deseada
+
+
+class InscriptosActividad(LoginRequiredMixin, UserPassesTestMixin, ListView):
+    model = UserAsistente
+    template_name = 'admin/actividad_inscriptos.html'
+    context_object_name = 'asistentes'
+
+    def test_func(self):
+        return self.request.user.is_staff
+    
+    def get_queryset(self):
+        # Suponiendo que la actividad tiene una clave primaria (pk) pasada por la URL
+        actividad = Actividad.objects.get(pk=self.kwargs['actividad_id'])
+        # Retornamos los asistentes de esa actividad
+        return actividad.asistentes.all()
+
+    def get_context_data(self, **kwargs): 
+        context = super().get_context_data(**kwargs)
+        # Agregamos la actividad al contexto, si deseas mostrar más información
+        context['actividad'] = Actividad.objects.get(pk=self.kwargs['actividad_id'])
+        context['asistentes'] = Actividad.objects.get(pk=self.kwargs['actividad_id']).asistentes.all()
+        return context
+
+
+def envio_correos_entradas(request, actividad_id):
+    if request.user.is_authenticated and request.user.is_staff:
+        # Llamar al método save del formulario para obtener la instancia y la contraseña
+        actividad = Actividad.objects.get(id=actividad_id)
+        for asistente in actividad.asistentes.all():
+            nombre = asistente.user.first_name
+            correo = asistente.user.email
+            dependencia = asistente.dependencia.nombre_largo
+            username = asistente.user.username
+            password = asistente.documento
+    
+            # Crear y enviar el correo
+            email = create_email(
+                user_mail=correo,
+                subject='Confirmación de Inscripción al CNEISI',
+                template_name='correos/inscripcion.html',
+                context={
+                    'usuario': username,  # Enviar el nombre de usuario
+                    'nombre': nombre,  # Enviar el nombre del usuario
+                    'dependencia': dependencia,
+                    'password': password,
+                    'url': 'https://cneisi.frlp.utn.edu.ar/login',
+                },
+            )
+            # Enviar el correo en un hilo separado para no bloquear la respuesta
+            thread = threading.Thread(target=email.send)
+            thread.start()
+        return redirect('staff_home')  # Redirige a la vista deseada
+    else:
+        return redirect('home')  # Redirige a la vista deseada

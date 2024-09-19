@@ -3,9 +3,25 @@ from django.contrib import admin
 from .models import UserAsistente, UserCoordinador, Dependencia, Aula, Actividad, TallesRemeras
 # Register your models here.
 
+
+class ActividadAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (
+            None,
+            {"fields": ['tipo', 'nombre', 'descripcion', 'hora_inicio', 'hora_final', 'orador', 'aula', 'portada', 'inscripcion'],},
+        ),
+        (
+            "Avanzada",
+            {
+                "classes": ["collapse"],
+                "fields": ["habilitada"],
+            },
+        ),
+    ]
+
 admin.site.register(UserCoordinador)
 admin.site.register(UserAsistente)
 admin.site.register(TallesRemeras)
 admin.site.register(Dependencia)
 admin.site.register(Aula)
-admin.site.register(Actividad)
+admin.site.register(Actividad, ActividadAdmin)

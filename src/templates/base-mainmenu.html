@@ -44,7 +44,7 @@
                 <li class="nav-item"><a class="nav-link text-white fw-bold" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
                     <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
                 {% elif request.user.is_authenticated and request.user.is_staff %}
-                <li class="nav-item"><a class="nav-link text-white fw-bold" href="{% url 'admin:index' %}">Admin</a></li>
+                <li class="nav-item"><a class="nav-link text-white fw-bold" href="{% url 'staff_home' %}">Admin</a></li>
                 <li class="nav-item"><a class="nav-link text-white fw-bold" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
                     <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
                 {% else %}

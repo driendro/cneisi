@@ -97,7 +97,7 @@ class UsuariosForm(forms.ModelForm):
             first_name=self.cleaned_data['first_name'],
             last_name=self.cleaned_data['last_name'],
             email=self.cleaned_data['email'],
-            password=generar_cadena_alternante()
+            password=self.cleaned_data['documento']
         )
         # Agregar al usuario al grupo por defecto, por ejemplo "Asistentes"
         # Reemplaza con el nombre correcto del grupo

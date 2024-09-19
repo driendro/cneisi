@@ -11,10 +11,10 @@
             <p>Nos complace informarte que tu inscripción al CNEISI 2024 ha sido realizada con éxito por el coordinador de {{ dependencia.title }}.</p>
             <p>Por favor, para poder asistir a las conferencias y charlas, no te olvides de inscribirte en las mismas en el siguiente enlace:</p>
             <ul>
-                <li>Link: <a href="https://cneisi.frlp.utn.edu.ar{% url 'login' %}">https://cneisi.frlp.utn.edu.ar{% url 'login' %}</a></li>
+                <li>Link: <a href="{{ url }}">{{ url }}</a></li>
                 <ul>
                     <li>Usuario: {{ usuario }} (debería ser tu DNI)</li>
-                    <li>Contraseña: En la página del login, selecciona "Olvidé mi contraseña" y sigue los pasos para generar una nueva.</li>
+                    <li>Contraseña: {{ usuario }} (debería ser tu DNI)</li>
                 </ul>
             </ul>
             <p>Dentro de la misma página podrás ver toda la información del Congreso y de las actividades.</p>

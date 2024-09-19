@@ -133,6 +133,7 @@ class Actividad(models.Model):
     tipo = models.CharField(max_length=150)
     nombre = models.CharField(max_length=150)
     descripcion = models.TextField()
+    fecha = models.DateField(default='2024-9-18')
     hora_inicio = models.TimeField(default='00:00')
     hora_final = models.TimeField(default='00:00')
     orador = models.CharField(max_length=100)
@@ -140,6 +141,7 @@ class Actividad(models.Model):
     portada = models.ImageField(upload_to=generar_ruta_unica, default='#')
     asistentes = models.ManyToManyField(UserAsistente, blank=True)
     habilitada = models.BooleanField(default=True)
+    inscripcion = models.BooleanField(default=False)
     
     def __str__(self):
         return '{} ({})'.format(self.nombre.upper(), self.aula.nombre)

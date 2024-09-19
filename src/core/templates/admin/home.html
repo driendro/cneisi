@@ -1,0 +1,106 @@
+{% extends 'base.html' %}{% load django_bootstrap5 %}{% load bootstrap_icons %}{% block content %}
+
+<div class="container">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h1>Listado de actividades</h1>
+            </div>
+            <div style='display: flex; justify-content: center; align-items: center;'>
+                <div class="btn-group" role="group">
+                    <a class="btn btn-primary btn-sm" href="{% url 'admin:core_actividad_add' %}" role="button" target="_blank">Nueva Actividad</a>
+                    <a class="btn btn-info btn-sm" href="{% url 'enviar_correos' %}" role="button">Notificar Inscriptos</a>
+                    <form action="{% url 'abrir_inscripciones' %}" method="post" style="display: inline">
+                        {% csrf_token %}<button class="btn btn-success btn-sm" type="submit">Abrir Inscripcion</button>
+                    </form>
+                    <form action="{% url 'cerrar_inscripciones' %}" method="post" style="display: inline">
+                        {% csrf_token %}<button class="btn btn-danger btn-sm" type="submit">Cerrar Inscripcion</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th><input type="text" id="filterActividad" class="form-control" placeholder="Actividad"></th>
+                            <th><input type="text" id="filterAula" class="form-control" placeholder="Aula"></th>
+                            <th><input type="text" id="filterFecha" class="form-control" placeholder="Fecha"></th>
+                            <th><input type="text" id="filterHorario" class="form-control" placeholder="Horario"></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        <tr>
+                            <th>Actividad</th>
+                            <th>Aula</th>
+                            <th>Fecha</th>
+                            <th>Horario</th>
+                            <th>Inscriptos (Cupo)</th>
+                            <th>Habilitada</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="inscriptosTableBody">
+                        {% for actividad in actividades %}
+                        <tr>
+                            <td>{{ actividad.nombre.title }}</td>
+                            <td>{{ actividad.aula.nombre.title }}</td>
+                            <td>{{ actividad.fecha }}</td>
+                            <td>{{ actividad.hora_inicio }} - {{ actividad.hora_final }}</td>
+                            <td>{{ actividad.asistentes.count }} ({{ actividad.aula.cupo }})</td>
+                            <td>{{ actividad.habilitada }} / {{ actividad.inscripcion }}</td>
+                            <td class="text-center">
+                            <div class="btn-group" role="group">
+                                <a class="btn btn-warning btn-sm" href="{% url 'ver_inscriptos' actividad.id %}" role="button">{% bs_icon 'eye' %}</a>
+                                <a class="btn btn-warning btn-sm" href="{% url 'admin:core_actividad_change' actividad.id %}" role="button">{% bs_icon 'pencil-square' %}</a>
+                                <form action="{% url 'admin:core_actividad_delete' actividad.id %}" method="post" style="display: inline">
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>
+                                </form>
+                            </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block content_js %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input[id^="filter"]');
+            const tableBody = document.getElementById('inscriptosTableBody');
+            const rows = tableBody.getElementsByTagName('tr');
+
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    const filterValues = Array.from(inputs).map(input => input.value.toLowerCase());
+                    
+                    for (let i = 0; i < rows.length; i++) {
+                        let shouldHide = false;
+                        const cells = rows[i].getElementsByTagName('td');
+                        
+                        for (let j = 0; j < filterValues.length; j++) {
+                            const cell = cells[j];
+                            if (cell) {
+                                const cellText = cell.textContent.toLowerCase();
+                                if (!cellText.includes(filterValues[j])) {
+                                    shouldHide = true;
+                                    break;
+                                }
+                            }
+                        }
+                        
+                        rows[i].style.display = shouldHide ? 'none' : '';
+                    }
+                });
+            });
+        });
+</script>
+
+{% endblock %}
+

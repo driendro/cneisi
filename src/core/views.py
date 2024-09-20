@@ -96,29 +96,18 @@ class UsuariosCreateView(GroupRequiredMixin, CreateView):
         return kwargs
     
     def form_valid(self, form):
-        ## Llamar al método save del formulario para obtener la instancia y la contraseña
-        #nombre= form.cleaned_data.get('first_name')
-        #correo= form.cleaned_data.get('email')
-        #dependencia = form.cleaned_data.get('dependencia').nombre_largo
-        #username = form.cleaned_data.get('documento')
-        #
-        ## Crear y enviar el correo
-        #email = create_email(
-        #    user_mail=correo,
-        #    subject='Confirmación de Inscripción al CNEISI',
-        #    template_name='correos/inscripcion.html',
-        #    context={
-        #        'usuario': username,  # Enviar el nombre de usuario
-        #        'nombre': nombre,  # Enviar el nombre del usuario
-        #        'dependencia': dependencia
-        #    },
-        #    request=self.request
-        #)
-        ## Enviar el correo en un hilo separado para no bloquear la respuesta
-        #thread = threading.Thread(target=email.send)
-        #thread.start()
+        # Esto es la instancia completa, no el ID
+        dependencia = form.cleaned_data.get('dependencia')
+        asistentes = UserAsistente.objects.filter(dependencia=dependencia)
 
-        return super().form_valid(form)
+        if dependencia.cupo == 0 or dependencia.cupo > asistentes.count():  # cupo es un atributo de 'dependencia'
+            return super().form_valid(form)
+        else:
+            # Agrega un mensaje de error al formulario
+            form.add_error(None, 'No hay suficientes cupos disponibles. El cupo de su dependencia es: {}'.format(
+                dependencia.cupo))
+            # Llama a form_invalid si falla la validación
+            return self.form_invalid(form)
         
 
 def import_users(request):
@@ -140,7 +129,6 @@ def import_users(request):
                     row_num = row_errors[0]
                     errors = row_errors[1]
                     error_list.append(f"Fila {row_num}: {', '.join([str(e.error) for e in errors])}")
-
                 messages.error(
                     request, f"Errores durante la importación:\n{error_list}")
             else:
@@ -149,9 +137,7 @@ def import_users(request):
                 messages.success(request, "Usuarios importados con éxito.")
         except Exception as e:
             messages.error(request, f"Error durante la importación: {str(e)}")
-
         return redirect('coordinador_inscribir_muchos')
-
     return render(request, 'usuarios/import.html')
 
 
@@ -182,7 +168,6 @@ class DetalleAsistente(GroupRequiredMixin, DetailView):
     template_name = 'usuarios/view_uno.html'  # Template que usaremos
     context_object_name = 'user_asistente'  # Nombre con el que accederás al objeto en la plantilla
     
-
 
 
 ###############################Asistente########################################################################################################################
@@ -216,7 +201,7 @@ class AsistenteHome(GroupRequiredMixin, TemplateView):
         return context
 
 
-#@login_required
+@login_required
 def inscribirse(request, actividad_id):
     if request.method == 'POST':
         actividad = get_object_or_404(Actividad, id=actividad_id)

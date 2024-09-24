@@ -8,7 +8,7 @@ class ActividadAdmin(admin.ModelAdmin):
     fieldsets = [
         (
             None,
-            {"fields": ['tipo', 'nombre', 'descripcion', 'hora_inicio', 'hora_final', 'orador', 'aula', 'portada', 'inscripcion'],},
+            {"fields": ['tipo', 'nombre', 'descripcion', 'fecha', 'hora_inicio', 'hora_final', 'orador', 'aula', 'portada', 'inscripcion'],},
         ),
         (
             "Avanzada",

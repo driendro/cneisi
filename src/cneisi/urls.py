@@ -22,12 +22,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
+from core.views import LandingPage
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('usuarios/', include('core.urls')),
 
-    path('', TemplateView.as_view(template_name="landing/home.html"), name='home'),
+    path('', LandingPage.as_view(), name='home'),
     #Urls de administracion de cuenta
     path("cuentas/login/", auth_views.LoginView.as_view(template_name="cuentas/login.html"), name='login'),
     path("cuentas/logout/", auth_views.LogoutView.as_view(template_name="cuentas/logout.html"), name='logout'),

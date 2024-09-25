@@ -1,6 +1,6 @@
 from django.contrib import admin
 #from django.contrib.auth.admin import UserAdmin
-from .models import UserAsistente, UserCoordinador, Dependencia, Aula, Actividad, TallesRemeras
+from .models import UserAsistente, UserCoordinador, Dependencia, Aula, Actividad, TallesRemeras, Sponsors
 # Register your models here.
 
 
@@ -24,4 +24,5 @@ admin.site.register(UserAsistente)
 admin.site.register(TallesRemeras)
 admin.site.register(Dependencia)
 admin.site.register(Aula)
+admin.site.register(Sponsors)
 admin.site.register(Actividad, ActividadAdmin)

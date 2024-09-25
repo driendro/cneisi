@@ -16,7 +16,7 @@ import threading
 from datetime import date
 
 # Create your views here.
-from .models import UserAsistente, UserCoordinador, Actividad, Dependencia
+from .models import UserAsistente, UserCoordinador, Actividad, Dependencia, Sponsors
 from .forms import UsuariosForm, AsistenteUpdateForm,generar_cadena_alternante
 from .mixins import GroupRequiredMixin
 from .resources import AsistenteResource, CoordinadorResource
@@ -70,6 +70,7 @@ class LandingPage(TemplateView):
         context['actividad_25'] = Actividad.objects.filter(fecha=date(2024, 10, 25)).all()
         context['actividad_26']=Actividad.objects.filter(fecha=date(2024,10,26)).all()
         context['actividad_27']=Actividad.objects.filter(fecha=date(2024,10,27)).all()
+        context['sponsors'] = Sponsors.objects.all()
         # Agrega un título para la página
         context['title'] = 'Registro de Usuario'
         return context

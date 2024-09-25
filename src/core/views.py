@@ -66,15 +66,13 @@ class LandingPage(TemplateView):
     def get_context_data(self, **kwargs):
         # En el Contexto se van a renderizar segun la fecha de la actividad, para poder mostrarlas mas facil en el home
         context = super().get_context_data(**kwargs)
-        context['actividades'] = Actividad.objects.all()
-        context['actividad_25'] = Actividad.objects.filter(fecha=date(2024, 10, 25)).all()
-        context['actividad_26']=Actividad.objects.filter(fecha=date(2024,10,26)).all()
-        context['actividad_27']=Actividad.objects.filter(fecha=date(2024,10,27)).all()
+        actividades = Actividad.objects.filter(inscripcion=True).all()
+        context['actividades'] = actividades
+        context['actividad_25'] = actividades.filter(fecha=date(2024, 10, 25)).all()
+        context['actividad_26']= actividades.filter(fecha=date(2024,10,26)).all()
+        context['actividad_27']= actividades.filter(fecha=date(2024,10,27)).all()
         context['sponsors'] = Sponsors.objects.all()
-        # Agrega un título para la página
-        context['title'] = 'Registro de Usuario'
         return context
-
 
 
 ###############################Coordinador########################################################################################################################

@@ -350,7 +350,7 @@ def envio_correos_entradas(request, actividad_id):
         return redirect('home')  # Redirige a la vista deseada
 
 class EliminarInscriptoActividad(UserPassesTestMixin, View):
-    group_name = 'coordinador'
+    
     
     # valida que sea staff
     def test_func(self):

@@ -58,11 +58,13 @@
                                     <!-- Editar inscripto-->
                                     <a class="btn btn-warning btn-sm" href="{% url 'admin_editar_asistente' pk=un_asistente.pk %}" role="button">{% bs_icon 'pencil-square' %}</a>
                                     
-                                    <!-- Eliminar inscripcion a actividad-->
-                                    <form action="{% url 'admin_eliminar_inscripto_actividad' pk=un_asistente.pk actividad_id=actividad.pk %}" method="post" style="display: inline">
-                                        {% csrf_token %}
-                                        <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>
-                                    </form>
+                                    <!-- Botón para eliminar inscripción -->
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                        data-url="{% url 'admin_eliminar_inscripto_actividad' pk=un_asistente.pk actividad_id=actividad.pk %}"
+                                        onclick="setDeleteFormAction(this.dataset.url); event.preventDefault();">
+                                        {% bs_icon 'trash3' %}
+                                    </button>
+
 
                                 <!-- Enviar entrada-->
                                 <a class="btn btn-info btn-sm" href="{% url 'admin:core_actividad_change' actividad.id %}" role="button">{% bs_icon 'ticket' %}</a>
@@ -77,6 +79,28 @@
                         {% endfor %}
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Está seguro de que desea eliminar esta inscripción?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" action="" method="post" style="display: inline">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit">Eliminar</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -115,6 +139,11 @@
                 });
             });
         });
+        
+        function setDeleteFormAction(url) {
+            document.getElementById('deleteForm').action = url;
+        }
+
 </script>
 
 {% endblock %}

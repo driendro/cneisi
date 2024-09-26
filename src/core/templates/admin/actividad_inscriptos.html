@@ -37,7 +37,7 @@
                             <th>Nombre</th>
                             <th>Correo</th>
                             <th>Dependencia</th>
-                            <th></th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="inscriptosTableBody">
@@ -68,15 +68,14 @@
                                         {% bs_icon 'trash3' %}
                                     </button>
 
+                                    <!-- Enviar entrada-->
+                                    <a class="btn btn-info btn-sm" href="{% url 'admin:core_actividad_change' actividad.id %}" role="button">{% bs_icon 'ticket' %}</a>
 
-                                <!-- Enviar entrada-->
-                                <a class="btn btn-info btn-sm" href="{% url 'admin:core_actividad_change' actividad.id %}" role="button">{% bs_icon 'ticket' %}</a>
-
-                                {% comment %} <form action="{% url 'admin:core_actividad_delete' actividad.id %}" method="post" style="display: inline">
-                                    {% csrf_token %}
-                                    <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>
-                                </form> {% endcomment %}
-                            </div>
+                                    {% comment %} <form action="{% url 'admin:core_actividad_delete' actividad.id %}" method="post" style="display: inline">
+                                        {% csrf_token %}
+                                        <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>
+                                    </form> {% endcomment %}
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}

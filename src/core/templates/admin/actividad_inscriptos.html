@@ -51,7 +51,22 @@
                             <td class="text-center">
                             <div class="btn-group" role="group">
                                 {% comment %} <a class="btn btn-warning btn-sm" href="{% url 'ver_inscriptos' actividad.id %}" role="button">{% bs_icon 'eye' %}</a> {% endcomment %}
+                                
+                                <!--Ver detalles del inscripto-->
+                                <a class="btn btn-info btn-sm" href="" role="button">{% bs_icon 'eye' %}</a>
+                                
+                                <!-- Editar inscripto-->
+                                <a class="btn btn-warning btn-sm" href="" role="button">{% bs_icon 'pencil-square' %}</a>
+
+                                <!-- Eliminar inscripcion a actividad-->
+                                <form action="" method="post" style="display: inline">
+                                    {% csrf_token %}
+                                    <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>
+                                </form>
+
+                                <!-- Enviar entrada-->
                                 <a class="btn btn-info btn-sm" href="{% url 'admin:core_actividad_change' actividad.id %}" role="button">{% bs_icon 'ticket' %}</a>
+
                                 {% comment %} <form action="{% url 'admin:core_actividad_delete' actividad.id %}" method="post" style="display: inline">
                                     {% csrf_token %}
                                     <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>

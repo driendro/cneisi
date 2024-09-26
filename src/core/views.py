@@ -348,3 +348,26 @@ def envio_correos_entradas(request, actividad_id):
         return redirect('staff_home')  # Redirige a la vista deseada
     else:
         return redirect('home')  # Redirige a la vista deseada
+
+class EliminarInscriptoActividad(UserPassesTestMixin, View):
+    group_name = 'coordinador'
+    
+    # valida que sea staff
+    def test_func(self):
+        return self.request.user.is_staff 
+
+    def post(self, request, pk, actividad_id):
+        # Obtengo al asistente inscripto mediante su pk
+        inscripto = get_object_or_404(UserAsistente, pk=pk)
+        
+        # Obtengo la actividad mediante su id
+        actividad = get_object_or_404(Actividad, pk=actividad_id)
+
+        # Elimino la relación entre el asistente y la actividad
+        actividad.asistentes.remove(inscripto)
+
+        messages.success(request, "Inscripción eliminada con éxito.")
+
+        # Redirijo al listado de inscriptos de la actividad
+        return redirect('ver_inscriptos', actividad_id=actividad.id)
+

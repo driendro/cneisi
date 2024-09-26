@@ -19,6 +19,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 
 from core.views import (
+    EliminarInscriptoActividad,
     PerfilHome,
     InscriptosList,
     UsuariosCreateView,
@@ -69,4 +70,6 @@ urlpatterns = [
     path('admin/ver_inscriptos/<int:actividad_id>',
          InscriptosActividad.as_view(), name='ver_inscriptos'),
     
+    path('user/<int:pk>/eliminar/<int:actividad_id>/', EliminarInscriptoActividad.as_view(),
+         name='admin_eliminar_inscripto_actividad')
 ]

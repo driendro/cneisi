@@ -59,7 +59,7 @@
                                 <a class="btn btn-warning btn-sm" href="" role="button">{% bs_icon 'pencil-square' %}</a>
 
                                 <!-- Eliminar inscripcion a actividad-->
-                                <form action="" method="post" style="display: inline">
+                                <form action="{% url 'admin_eliminar_inscripto_actividad' pk=un_asistente.pk actividad_id=actividad.pk %}" method="post" style="display: inline">
                                     {% csrf_token %}
                                     <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>
                                 </form>

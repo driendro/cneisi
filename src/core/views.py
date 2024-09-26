@@ -374,7 +374,7 @@ class EliminarInscriptoActividad(UserPassesTestMixin, View):
 class EditarAsistenteAdmin(UserPassesTestMixin, UpdateView):
     model = UserAsistente
     form_class = AsistenteUpdateForm
-    group_name = 'coordinador'
+   
     template_name = 'usuarios/update_uno.html'
 
     # valida que sea staff

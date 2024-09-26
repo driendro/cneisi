@@ -70,6 +70,9 @@ urlpatterns = [
     path('admin/ver_inscriptos/<int:actividad_id>',
          InscriptosActividad.as_view(), name='ver_inscriptos'),
     
+    path('admin/user/<int:pk>/ver', DetalleAsistente.as_view(),
+         name='admin_ver_asistente'),
+
     path('user/<int:pk>/eliminar/<int:actividad_id>/', EliminarInscriptoActividad.as_view(),
          name='admin_eliminar_inscripto_actividad')
 ]

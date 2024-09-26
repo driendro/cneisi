@@ -59,7 +59,7 @@
                                     </button>
                                     
                                     <!-- Editar inscripto -->
-                                    <a class="btn btn-warning btn-sm" href="{% url 'admin_editar_asistente' pk=un_asistente.pk %}" role="button">{% bs_icon 'pencil-square' %}</a>
+                                    <a class="btn btn-warning btn-sm" href="{% url 'admin_editar_asistente' pk=un_asistente.pk actividad_id=actividad.pk %}" role="button">{% bs_icon 'pencil-square' %}</a>
                                     
                                     <!-- Eliminar inscripción -->
                                     <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"

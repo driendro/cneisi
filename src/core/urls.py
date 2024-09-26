@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 
 from core.views import (
     EliminarInscriptoActividad,
+    EditarAsistenteAdmin,
     PerfilHome,
     InscriptosList,
     UsuariosCreateView,
@@ -76,6 +77,6 @@ urlpatterns = [
     path('admin/<int:pk>/eliminar/<int:actividad_id>/', EliminarInscriptoActividad.as_view(),
          name='admin_eliminar_inscripto_actividad'),
 
-    path('admin/user/<int:pk>/editar', EditarAsistente.as_view(),
+    path('admin/user/<int:pk>/editar/<int:actividad_id>/', EditarAsistenteAdmin.as_view(),
          name='admin_editar_asistente')
 ]

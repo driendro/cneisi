@@ -371,3 +371,24 @@ class EliminarInscriptoActividad(UserPassesTestMixin, View):
         # Redirijo al listado de inscriptos de la actividad
         return redirect('ver_inscriptos', actividad_id=actividad.id)
 
+class EditarAsistenteAdmin(UserPassesTestMixin, UpdateView):
+    model = UserAsistente
+    form_class = AsistenteUpdateForm
+    group_name = 'coordinador'
+    template_name = 'usuarios/update_uno.html'
+
+    # valida que sea staff
+    def test_func(self):
+        return self.request.user.is_staff 
+    
+    # Redirecciona a la lista de inscriptos de la actividad
+    def get_success_url(self):
+        actividad_id = self.kwargs['actividad_id']
+        return reverse_lazy('ver_inscriptos', kwargs={'actividad_id': actividad_id})
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Agrega un título para la página
+        context['title'] = 'Actualizar datos del Asistente'
+        return context

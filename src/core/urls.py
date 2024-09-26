@@ -73,7 +73,7 @@ urlpatterns = [
     path('admin/user/<int:pk>/ver', DetalleAsistente.as_view(),
          name='admin_ver_asistente'),
 
-    path('user/<int:pk>/eliminar/<int:actividad_id>/', EliminarInscriptoActividad.as_view(),
+    path('admin/<int:pk>/eliminar/<int:actividad_id>/', EliminarInscriptoActividad.as_view(),
          name='admin_eliminar_inscripto_actividad'),
 
     path('admin/user/<int:pk>/editar', EditarAsistente.as_view(),

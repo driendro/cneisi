@@ -415,7 +415,7 @@ class InscribirAsistenteAdmin(UserPassesTestMixin, View):
                 
                 if actividad.inscripcion:
                     if user_asistente not in actividad.asistentes.all():
-                        if actividad.asistentes.count() >= cupo and cupo != 0:    
+                        if actividad.asistentes.count()>=cupo-1 and not cupo==0:
                             actividad.habilitada = False
                             actividad.save()
                         actividad.asistentes.add(user_asistente)   

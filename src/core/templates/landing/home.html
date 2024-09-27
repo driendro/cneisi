@@ -1,178 +1,574 @@
-{% extends 'base_home.html' %} {% load static %} {% load django_bootstrap5 %} {% load bootstrap_icons %}
+{% extends 'base_home.html' %} {% load static %} {% load django_bootstrap5 %} {% load bootstrap_icons %}{% load user_tags %}
 {% block content %}
 
+    <!-- Spinner Start -->
+    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
 
-    <div class="image-container div_left">
-        <img src="{% static 'img/header/fondo.png' %}" class="header-image">
-        <img src="{% static 'img/header/superior.png' %}" alt="Image 1" class="image image-fecha">
-        <img src="{% static 'img/header/impacto.png' %}" alt="Image 2" class="image image-impacto">
-        <img src="{% static 'img/header/logo.png' %}" alt="Image 3" class="image image-logo">
-        <img src="{% static 'img/header/inferior.png' %}" alt="Image 4" class="image image-slogan">
+    <!-- Navbar Start -->
+    <nav class="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
+        <a href="{% url 'home' %}" class="navbar-brand d-flex align-items-center px-4 px-lg-5">
+            <img src="{% static 'img/landing/imagotipo_negro.png' %}">
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto p-4 p-lg-0">
+            {% if request.user.is_authenticated and request.user|has_group:"asistente"  %}
+                <a class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" href="{% url 'perfil_home' %}">Actividades</a>
+                <a class="btn btn-danger py-4 px-lg-5 d-none d-lg-block" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
+                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
+            {% elif request.user.is_authenticated and request.user|has_group:"coordinador"  %}
+                <a class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" href="{% url 'perfil_home' %}">Administracion</a>
+                <a class="btn btn-danger py-4 px-lg-5 d-none d-lg-block" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
+                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
+            {% elif request.user.is_authenticated and request.user.is_staff %}
+                <a class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" href="{% url 'staff_home' %}">Actividades</a>
+                <a class="btn btn-danger py-4 px-lg-5 d-none d-lg-block" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
+                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Ingresar {% bs_icon "arrow-right" size='2em' %}</a>
+            {% endif %}
+            </div>
+        </div>
+    </nav>
+    <!-- Navbar End -->
+
+    <!-- Carousel Start -->
+<div class="container-fluid p-0 mb-5">
+    <div class="owl-carousel header-carousel position-relative">
+        <div class="owl-carousel-item position-relative">
+            <img class="img-fluid" src="{% static 'img/landing/banner_1.jpg' %}" alt="">
+        </div>
+        <div class="owl-carousel-item position-relative">
+            <img class="img-fluid" src="{% static 'img/landing/banner_2.jpg' %}" alt="">
+        </div>
+        <div class="owl-carousel-item position-relative">
+            <img class="img-fluid" src="{% static 'img/landing/banner_3.jpg' %}" alt="">
+        </div>
     </div>
 
-<section class="showcase div_left_1">
-    <div class="image-container">
-        <img src="{% static 'img/header/fondo.png' %}" class="header-image">
-        <img src="{% static 'img/ejes/titulo_sup.png' %}"   class="image image-titulo_sup">
-        <img src="{% static 'img/ejes/titulo_med.png' %}"   class="image image-titulo_med">
-        <img src="{% static 'img/ejes/titulo_inf.png' %}"   class="image image-titulo_inf">
-        <img src="{% static 'img/ejes/ejes_titulo.png' %}"  class="image image-ejes_titulo">
-        <img src="{% static 'img/ejes/eje_linea.png' %}"    class="image image-eje_linea">
-        <img src="{% static 'img/ejes/eje_img.png' %}"      class="image image-eje_img">
-        <img src="{% static 'img/ejes/eje_footer.png' %}"   class="image image-eje_footer">
-        <img src="{% static 'img/ejes/img_sup.png' %}"      class="image image-img_sup">
-        <img src="{% static 'img/ejes/img_inf.png' %}"      class="image image-img_inf">
+    <!-- Carousel navigation -->
+    <div class="carousel-nav">
+        <span class="nav-left">
+            {% bs_icon "chevron-left" %}
+        </span>
+        <span class="nav-right">
+            {% bs_icon "chevron-right" %}
+        </span>
     </div>
-</section>
-<section class="showcase div_left_2">
-    <div class="image-container">
-        <img src="{% static 'img/header/fondo.png' %}" class="header-image">
-        <img src="{% static 'img/actividades/activi_1.png' %}"      class="image image-activi_1">
-        <img src="{% static 'img/actividades/activi_2.png' %}"      class="image image-activi_2">
-        <img src="{% static 'img/actividades/activi_3.png' %}"      class="image image-activi_3">
-        <img src="{% static 'img/actividades/activi_4.png' %}"      class="image image-activi_4">
-        <img src="{% static 'img/actividades/activi_5.png' %}"      class="image image-activi_5">
-        <img src="{% static 'img/actividades/activi_6.png' %}"      class="image image-activi_6">
-        <img src="{% static 'img/actividades/actividades.png' %}"   class="image image-actividades">
-        <img src="{% static 'img/actividades/inf_img.png' %}"       class="image image-inf_img">
-        <img src="{% static 'img/actividades/sup_img.png' %}"       class="image image-sup_img">
-    </div>
-</section>
-<section class="showcase div_left_1 animate3">
-    <div class="header-image-container">
-        <img src="{% static 'img/header/fondo.png' %}" class="header-image">
-        <img src="{% static 'img/cronograma/img_dom.png' %}"  class="image image-img_dom">
-        <img src="{% static 'img/cronograma/img_sab.png' %}"  class="image image-img_sab">
-        <img src="{% static 'img/cronograma/img_vie.png' %}"  class="image image-img_vie">
-        <img src="{% static 'img/cronograma/img_11.png' %}"   class="image image-img_11">
-        <img src="{% static 'img/cronograma/img_12.png' %}"   class="image image-img_12">
-        <img src="{% static 'img/cronograma/img_13.png' %}"   class="image image-img_13">
-        <img src="{% static 'img/cronograma/img_14.png' %}"   class="image image-img_14">
-        <img src="{% static 'img/cronograma/img_21.png' %}"   class="image image-img_21">
-        <img src="{% static 'img/cronograma/img_22.png' %}"   class="image image-img_22">
-        <img src="{% static 'img/cronograma/img_31.png' %}"   class="image image-img_31">
-        <img src="{% static 'img/cronograma/img_32.png' %}"   class="image image-img_32">
-        <img src="{% static 'img/cronograma/img_33.png' %}"   class="image image-img_33">
-        <img src="{% static 'img/cronograma/num_dom.png' %}"  class="image image-num_dom">
-        <img src="{% static 'img/cronograma/num_sab.png' %}"  class="image image-num_sab">
-        <img src="{% static 'img/cronograma/num_vie.png' %}"  class="image image-num_vie">
-        <img src="{% static 'img/cronograma/titulo.png' %}"   class="image image-titulo">
-    </div>
-</section>
+</div>
+<!-- Carousel End -->
 
-<!-- Footer -->
-<footer class="py-4 bg-dark text-white text-center" style="background: linear-gradient(to right, #304355, #3497da)">
-  <p>
-    &copy; 2024 Congreso Nacional de Estudiantes de Ingeniería en Sistemas de Información. Todos los derechos reservados.
-  </p>
-</footer>
-{% endblock %}
+    <!-- Service Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-4">
+                <div class="col-lg-4 col-sm-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="service-item text-center pt-3">
+                        <div class="p-4">
+                            {% bs_icon 'cpu' size='5em' extra_classes='text-primary mb-4' %}
+                            <h5 class="mb-3">Inteligencia Artificial</h5>
+                            {% comment %} <p>Diam elitr kasd sed at elitr sed ipsum justo dolor sed clita amet diam</p> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <div class="service-item text-center pt-3">
+                        <div class="p-4">
+                            {% bs_icon 'shield-lock' size='5em' extra_classes='text-primary mb-4' %}
+                            <h5 class="mb-3">Ciber Seguridad</h5>
+                            {% comment %} <p>Diam elitr kasd sed at elitr sed ipsum justo dolor sed clita amet diam</p> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-sm-6 wow fadeInUp" data-wow-delay="0.7s">
+                    <div class="service-item text-center pt-3">
+                        <div class="p-4">
+                            {% bs_icon 'globe' size='5em' extra_classes='text-primary mb-4' %}
+                            <h5 class="mb-3">Futuros Líderes Tecnológicos</h5>
+                            {% comment %} <p>Diam elitr kasd sed at elitr sed ipsum justo dolor sed clita amet diam</p> {% endcomment %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Service End -->
+
+    <!-- About Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="row g-5">
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.1s" style="min-height: 400px;">
+                    <div class="position-relative h-100">
+                        <img class="img-fluid position-absolute w-100 h-100" src="{% static 'img/landing/placa700x700.jpg' %}" alt="" style="object-fit: cover;">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.3s">
+                    <h6 class="section-title bg-white text-start text-primary pe-3">CNEISI 2024</h6>
+                    <h1 class="mb-4">CONGRESO NACIONAL DE ESTUDIANTES DE INGENIERIA EN SISTEMAS</h1>
+                    <p class="mb-4">Es un evento que reúne a estudiantes, académicos y profesionales del campo de la Ingeniería en Sistemas de Información de todo el país.
+                        Es esencial para ampliar el horizonte académico y profesional de los participantes, permitiendo actualizarse sobre las últimas tendencias y tecnologías del sector.</p>
+                    <p class="mb-4">Durante este congreso se tendra una amplia gama de charlas y actividades, abarcando desde las últimas tendencias tecnológicas hasta aspectos más generales
+                    de la formación profesional de un ingeniero, con el objetivo de brindar a los participantes una visión integral del campo:</p>
+                    <div class="row gy-2 gx-4 mb-4">
+                        <div class="col-sm-6">
+                            <p class="mb-0">{% bs_icon 'arrow-right' size='2em' extra_classes='text-primary' %}</i>Inteligencia Artificial</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0">{% bs_icon 'arrow-right' size='2em' extra_classes='text-primary' %}</i>Privacidad de Datos</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0">{% bs_icon 'arrow-right' size='2em' extra_classes='text-primary' %}</i>Inserción Laboral</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0">{% bs_icon 'arrow-right' size='2em' extra_classes='text-primary' %}</i>Emprendimiento y Innovación</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0">{% bs_icon 'arrow-right' size='2em' extra_classes='text-primary' %}</i>Gestión de Proyectos</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <p class="mb-0">{% bs_icon 'arrow-right' size='2em' extra_classes='text-primary' %}</i>Responsabilidad Social</p>
+                        </div>
+                    </div>
+                    {% comment %} <a class="btn btn-primary py-3 px-5 mt-2" href="">Read More</a> {% endcomment %}
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+    <!-- Categories Start -->
+    <div class="container-xxl py-5 category">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Numeros</h6>
+                <h1 class="mb-5">El CNEISI en Números</h1>
+            </div>
+            <div class="row g-3">
+                <div class="col-lg-7 col-md-6">
+                    <div class="row g-3">
+                        <div class="col-lg-12 col-md-12 wow zoomIn" data-wow-delay="0.1s">
+                            <a class="position-relative d-block overflow-hidden" href="">
+                                <img class="img-fluid" src="{% static 'img/landing/20000estudiantes800x300.jpg' %}" alt="">
+                                <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
+                                    <h5 class="m-0">+20 000 Estudiantes</h5>
+                                    {% comment %} <small class="text-primary">12 Provincias</small> {% endcomment %}
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.3s">
+                            <a class="position-relative d-block overflow-hidden" href="">
+                                <img class="img-fluid" src="{% static 'img/landing/30regionales600x400.jpg' %}" alt="">
+                                <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
+                                    <h5 class="m-0">30 Regionales</h5>
+                                    {% comment %} <small class="text-primary">30 Regionales</small> {% endcomment %}
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-lg-6 col-md-12 wow zoomIn" data-wow-delay="0.5s">
+                            <a class="position-relative d-block overflow-hidden" href="">
+                                <img class="img-fluid" src="{% static 'img/landing/40actividades600x400.jpg' %}" alt="">
+                                <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin: 1px;">
+                                    <h5 class="m-0">+40 Actividades</h5>
+                                    {% comment %} <small class="text-primary"></small> {% endcomment %}
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-5 col-md-6 wow zoomIn" data-wow-delay="0.7s" style="min-height: 350px;">
+                    <a class="position-relative d-block h-100 overflow-hidden" href="">
+                        <img class="img-fluid position-absolute w-100 h-100" src="{% static 'img/landing/provincias600x600.jpg' %}" alt="" style="object-fit: cover;">
+                        <div class="bg-white text-center position-absolute bottom-0 end-0 py-2 px-3" style="margin:  1px;">
+                            <h5 class="m-0">12 Provincias</h5>
+                            {% comment %} <small class="text-primary">+20 000 Estudiantes</small> {% endcomment %}
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Categories Start -->
+
+    <!-- Courses Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Cronograma</h6>
+                <h1 class="mb-5">Cronograma General</h1>
+            </div>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item bg-light">
+                        <div class="position-relative overflow-hidden">
+                            <img class="img-fluid" src="{% static 'img/landing/viernes.jpg' %}" alt="">
+                        </div>
+                        <div class="text-center p-1 pb-0">
+                            <h3 class="mb-0">Viernes</h3>
+                            <h5 class="mb-4">24 de Octubre</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item bg-light">
+                        <div class="position-relative overflow-hidden">
+                            <img class="img-fluid" src="{% static 'img/landing/sabado.jpg' %}" alt="">
+                        </div>
+                        <div class="text-center p-1 pb-0">
+                            <h3 class="mb-0">Sabado</h3>
+                            <h5 class="mb-4">25 de Octubre</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="course-item bg-light">
+                        <div class="position-relative overflow-hidden">
+                            <img class="img-fluid" src="{% static 'img/landing/domingo.jpg' %}" alt="">
+                        </div>
+                        <div class="text-center p-1 pb-0">
+                            <h3 class="mb-0">Domingo</h3>
+                            <h5 class="mb-4">26 de Octubre</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Courses End -->
+
+    <!-- Team Start -->
+    <div class="container-xxl py-5">
+        <div class="container">
+            {% if actividades %}
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                <h6 class="section-title bg-white text-center text-primary px-3">Charlas, Talleres y Seminarios</h6>
+                {% comment %} <h1 class="mb-5">Expert Instructors</h1> {% endcomment %}
+            </div>
+            {% if actividad_25 %}
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                {% comment %} <h6 class="section-title bg-white text-center text-primary px-3">Charlas, Talleres y Seminarios</h6> {% endcomment %}
+                <h1 class="mb-5">Viernes 25 de Octubre</h1>
+            </div>
+            <div class="row g-4">
+                {% for una_actividad25 in actividad_25 %}
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="team-item bg-light">
+                        <div class="overflow-hidden">
+                            <img class="img-fluid" src="{{ una_actividad25.portada.url}}" alt="{{ una_actividad25.nombre}}">
+                        </div>
+                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+                            <div class="bg-light d-flex justify-content-center pt-1 px-1">
+                                <a class="btn btn-primary px-3" href="">Inscribirme</a>
+                            </div>
+                        </div>
+                        <div class="text-center p-4">
+                            <h5 class="mb-0">{{ una_actividad25.nombre}}</h5>
+                            <small>{{ una_actividad25.orador}}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if actividad_26 %}
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                {% comment %} <h6 class="section-title bg-white text-center text-primary px-3">Charlas, Talleres y Seminarios</h6> {% endcomment %}
+                <h1 class="mb-5">Sabado 26 de Octubre</h1>
+            </div>
+            <div class="row g-4">
+                {% for una_actividad26 in actividad_26 %}
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="team-item bg-light">
+                        <div class="overflow-hidden">
+                            <img class="img-fluid" src="{{ una_actividad26.portada.url}}" alt="{{ una_actividad26.nombre}}">
+                        </div>
+                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+                            <div class="bg-light d-flex justify-content-center pt-1 px-1">
+                                <a class="btn btn-primary px-3" href="">Inscribirme</a>
+                            </div>
+                        </div>
+                        <div class="text-center p-4">
+                            <h5 class="mb-0">{{ una_actividad26.nombre}}</h5>
+                            <small>{{ una_actividad26.orador}}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% if actividad_27 %}
+            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+                {% comment %} <h6 class="section-title bg-white text-center text-primary px-3">Charlas, Talleres y Seminarios</h6> {% endcomment %}
+                <h1 class="mb-5">Domingo 27 de Octubre</h1>
+            </div>
+            <div class="row g-4">
+                {% for una_actividad27 in actividad_27 %}
+                <div class="col-lg-3 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
+                    <div class="team-item bg-light">
+                        <div class="overflow-hidden">
+                            <img class="img-fluid" src="{{ una_actividad27.portada.url}}" alt="{{ una_actividad27.nombre}}">
+                        </div>
+                        <div class="position-relative d-flex justify-content-center" style="margin-top: -23px;">
+                            <div class="bg-light d-flex justify-content-center pt-1 px-1">
+                                <a class="btn btn-primary px-3" href="">Inscribirme</a>
+                            </div>
+                        </div>
+                        <div class="text-center p-4">
+                            <h5 class="mb-0">{{ una_actividad27.nombre}}</h5>
+                            <small>{{ una_actividad27.orador}}</small>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+    </div>
+    <!-- Team End -->
+
+
+    <!-- Testimonial Start -->
+    {% if sponsors %}
+    <div class="container-xxl py-5 wow fadeInUp" data-wow-delay="0.1s">
+        <div class="container">
+            <div class="text-center">
+                <h6 class="section-title bg-white text-center text-primary px-3">Auspiciantes</h6>
+                <h1 class="mb-5">Nos acompañan</h1>
+            </div>
+            <div class="owl-carousel testimonial-carousel position-relative">
+                {% for un_sponsor in sponsors %}
+                <div class="text-center">
+                    <a href="{{ un_sponsor.url }}" target="_blank">
+                        <img class="p-1 mx-auto mb-2" src="{{ un_sponsor.logo.url }}" alt="{{ un_sponsor.nombre }}" style="width: 200px; height: auto;">
+                    </a>
+                </div>
+                {% endfor %}
+                {% comment %} <div class="testimonial-item text-center">
+                    <img class="border rounded-circle p-2 mx-auto mb-3" src="https://placehold.co/100x100" style="width: 150px; height: 150px;">
+                    <h5 class="mb-0">Client Name</h5>
+                    <p>Profession</p>
+                    <div class="testimonial-text bg-light text-center p-4">
+                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                    </div>
+                </div>
+                <div class="testimonial-item text-center">
+                    <img class="border rounded-circle p-2 mx-auto mb-3" src="https://placehold.co/100x100" style="width: 250px; height: 250px;">
+                    <h5 class="mb-0">Client Name</h5>
+                    <p>Profession</p>
+                    <div class="testimonial-text bg-light text-center p-4">
+                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                    </div>
+                </div>
+                <div class="testimonial-item text-center">
+                    <img class="border rounded-circle p-2 mx-auto mb-3" src="https://placehold.co/100x100" style="width: 80px; height: 80px;">
+                    <h5 class="mb-0">Client Name</h5>
+                    <p>Profession</p>
+                    <div class="testimonial-text bg-light text-center p-4">
+                    <p class="mb-0">Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit diam amet diam et eos. Clita erat ipsum et lorem et sit.</p>
+                    </div>
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- Testimonial End -->
+        
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-dark text-light footer pt-5 mt-5 wow fadeIn" data-wow-delay="0.1s">
+        <div class="container py-5">
+            <div class="row g-5">
+                <div class="col-lg-6 col-md-6">
+                    <h4 class="text-white mb-3">Contactos</h4>
+                    <p class="mb-2">{% bs_icon "pin-map-fill" %} Av.60 esq. 124 s/n, Berisso, Buenos Aires, Argentina</p>
+                    <p class="mb-2">{% bs_icon "phone" %} +54 9 221 412 4300 int: 4364</p>
+                    <p class="mb-2">{% bs_icon "envelope" %} cneisi@frlp.utn.edu.ar</p>
+                    <p class="mb-2">{% bs_icon "instagram" %} @utnfrlp.eventos</p>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <gmp-map center="-34.90510940551758,-57.92537307739258" zoom="14" map-id="DEMO_MAP_ID">
+                        <gmp-advanced-marker position="-34.90510940551758,-57.92537307739258" title="My location"></gmp-advanced-marker>
+                    </gmp-map>
+                    <div id="map"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="copyright">
+                <div class="row">
+                    <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                        &copy; <a class="border-bottom" href="#">CNEISI</a>, todos los derechos reservados.
+
+                        <!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                        Diseñado por <a class="border-bottom">SAU</a>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end">
+                        <div class="footer-menu">
+                            <a href="">Home</a>
+                            <a href="">Cookies</a>
+                            <a href="">Help</a>
+                            <a href="">FQAs</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer End -->
+
+{% endblock content %}
+
+
+
+
+
+
+
+
+
+
+
 
 {% block content_js %}
-    <script>
-        // Cambia el fondo del navbar cuando se hace scroll
-        window.addEventListener('scroll', function() {
-            if (window.scrollY > 50) { // Si se desplaza más de 50px
-                document.body.classList.add('scrolled');
-            } else {
-                document.body.classList.remove('scrolled');
+
+<script>
+(function ($) {
+    "use strict";
+
+    // Spinner
+    var spinner = function () {
+        setTimeout(function () {
+            if ($('#spinner').length > 0) {
+                $('#spinner').removeClass('show');
             }
-        });
+        }, 1);
+    };
+    spinner();
+    
+    
+    // Initiate the wowjs
+    new WOW().init();
 
-        document.addEventListener('DOMContentLoaded', () => {
-            // Animación para el primer div
-            const firstDivImages = document.querySelectorAll('.div_left .image');
-            firstDivImages.forEach(image => image.classList.add('active'));
 
-            // Animación para la sección cuando esté al 80% visible
-            const section = document.querySelector('.showcase');
-            const sectionImages = section.querySelectorAll('.image');
+    // Sticky Navbar
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 300) {
+            $('.sticky-top').css('top', '0px');
+        } else {
+            $('.sticky-top').css('top', '-100px');
+        }
+    });
+    
+    
+    // Dropdown on mouse hover
+    const $dropdown = $(".dropdown");
+    const $dropdownToggle = $(".dropdown-toggle");
+    const $dropdownMenu = $(".dropdown-menu");
+    const showClass = "show";
+    
+    $(window).on("load resize", function() {
+        if (this.matchMedia("(min-width: 992px)").matches) {
+            $dropdown.hover(
+            function() {
+                const $this = $(this);
+                $this.addClass(showClass);
+                $this.find($dropdownToggle).attr("aria-expanded", "true");
+                $this.find($dropdownMenu).addClass(showClass);
+            },
+            function() {
+                const $this = $(this);
+                $this.removeClass(showClass);
+                $this.find($dropdownToggle).attr("aria-expanded", "false");
+                $this.find($dropdownMenu).removeClass(showClass);
+            }
+            );
+        } else {
+            $dropdown.off("mouseenter mouseleave");
+        }
+    });
+    
+    
+    // Back to top button
+    $(window).scroll(function () {
+        if ($(this).scrollTop() > 300) {
+            $('.back-to-top').fadeIn('slow');
+        } else {
+            $('.back-to-top').fadeOut('slow');
+        }
+    });
+    $('.back-to-top').click(function () {
+        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        return false;
+    });
 
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                  if (entry.isIntersecting) {
-                    sectionImages.forEach(image => image.classList.add('active'));
-                  }
-                });
-            }, {
-                threshold: 0.2 // 80% de la sección visible
-            });
-            observer.observe(section);
 
-            // Animación para la sección cuando esté al 80% visible
-            const section2 = document.querySelector('.div_left_2');
-            const sectionImages2 = section2.querySelectorAll('.image');
+    // Header carousel
+    $(".header-carousel").owlCarousel({
+        autoplay: true,
+        smartSpeed: 1500,
+        items: 1,
+        dots: false,
+        loop: true,
+        nav : true,
+        navText: [
+                $(".nav-left").html(),
+                $(".nav-right").html()
+            ]
+    });
 
-            const observer2 = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                  if (entry.isIntersecting) {
-                    sectionImages2.forEach(image => image.classList.add('active'));
-                  }
-                });
-            }, {
-                threshold: 0.2 // 80% de la sección visible
-            });
-            observer2.observe(section2);
 
-            // Animación para la sección cuando esté al 80% visible
-            const section3 = document.querySelector('.animate3');
-            const sectionImages3 = section3.querySelectorAll('.image');
+    // Testimonials carousel
+    $(".testimonial-carousel").owlCarousel({
+        autoplay: true,
+        smartSpeed: 1000,
+        center: true,
+        margin: 24,
+        dots: true,
+        loop: true,
+        nav : false,
+        responsive: {
+            0:{
+                items:1
+            },
+            768:{
+                items:2
+            },
+            992:{
+                items:3
+            }
+        }
+    });
+    
+})(jQuery);
 
-            const observer3 = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                  if (entry.isIntersecting) {
-                    sectionImages3.forEach(image => image.classList.add('active'));
-                  }
-                });
-            }, {
-                threshold: 0.2 // 80% de la sección visible
-            });
-            observer3.observe(section3);
-        });
+var map = new google.maps.Map(document.getElementById('map'), {
+      center: {lat: -34.9205, lng: -58.0072},
+      zoom: 15
+    });
 
-        
-//
-    //    // animaciones header
-    //    document.addEventListener("DOMContentLoaded", function() {
-    //        const images = document.querySelectorAll('.image');
-    //        let currentIndex = 0;
-//
-    //    function showNextImage() {
-    //      // Solo agregamos la clase 'active' a la imagen actual
-    //      images[currentIndex].classList.add('active');
-    //      // Actualizamos el índice para la siguiente imagen
-    //      currentIndex = (currentIndex + 1) % images.length;
-    //    }
-//
-    //    // Configuración del Intersection Observer
-    //    const observerOptions = {
-    //      root: null,  // El viewport es el elemento raíz
-    //      threshold: 0.2  // Cuándo activar la animación (10% visible)
-    //    };
-//
-    //    const observer = new IntersectionObserver((entries) => {
-    //      entries.forEach(entry => {
-    //        if (entry.isIntersecting) {
-    //          // Si la imagen está en el viewport, se le añade la clase "active"
-    //          entry.target.classList.add("active");
-    //          // Mostrar la siguiente imagen
-    //          //showNextImage();
-    //        //} else {
-    //        //  // Si la imagen sale del viewport, opcionalmente remueve la clase
-    //        //  entry.target.classList.remove("active");
-    //        }
-    //      });
-    //    }, observerOptions);
-//
-    //    // Seleccionar todas las imágenes con la clase ".image"
-    //    images.forEach(image => {
-    //      observer.observe(image);
-    //    });
-//
-    //    // Cambiar imagen cada 3 segundos
-    //    //setInterval(showNextImage, 500);
-    //});
-    //
-    </script>
+    var marker = new google.maps.Marker({
+      position: {lat: -34.9205, lng: -58.0072},
+      map: map,
+      title: 'CNEISI 2024'
+    });
+
+    var infoWindow = new google.maps.InfoWindow({
+      content: 'UTN - FRLP <br>C. 59 864, B1900 BTJ, Provincia de Buenos Aires, Argentina<br><a href="https://maps.google.com/?cid=1560901840900777645">Ver en Google Maps</a>'
+    });
+
+    marker.addListener('click', function() {
+      infoWindow.open(map, marker);
+    });
+
+</script>
 
 {% endblock %}

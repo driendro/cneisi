@@ -5,3 +5,4 @@ active/*
 public*
 .env
 *db.sqlite3
+src/cneisi.sqlite3

@@ -223,7 +223,7 @@ def desinscribirse(request, actividad_id):
         cupo = actividad.aula.cupo
         user_asistente = request.user.userasistente
         if user_asistente in actividad.asistentes.all():
-            if actividad.asistentes.count() <= cupo+1:
+            if actividad.asistentes.count() < cupo+1:
                 actividad.habilitada = True
                 actividad.save()
             actividad.asistentes.remove(user_asistente)

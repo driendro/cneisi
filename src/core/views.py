@@ -208,7 +208,7 @@ def inscribirse(request, actividad_id):
         cupo = actividad.aula.cupo
         user_asistente = request.user.userasistente
         if user_asistente not in actividad.asistentes.all():
-            if actividad.asistentes.count()>cupo-1 and not cupo==0:
+            if actividad.asistentes.count()>=cupo-1 and not cupo==0:
                 actividad.habilitada = False
                 actividad.save()
             actividad.asistentes.add(user_asistente)

@@ -3,7 +3,7 @@
 <div class="container">
         <div class="row">
             <div class="col-md-12 text-center">
-                <h1>Listado de actividades</h1>
+                <h1>Inscriptos en {{ actividad.nombre }}</h1>
             </div>
             <div style='display: flex; justify-content: center; align-items: center;'>
                 <div class="btn-group" role="group">
@@ -24,7 +24,7 @@
                 <table class="table table-hover">
                     <thead>
                         <tr>
-                            <th><input type="text" id="filterDocumentp" class="form-control" placeholder="Documento"></th>
+                            <th><input type="text" id="filterDocumento" class="form-control" placeholder="Documento"></th>
                             <th><input type="text" id="filterApellido" class="form-control" placeholder="Apellido"></th>
                             <th><input type="text" id="filterNombre" class="form-control" placeholder="Nombre"></th>
                             <th><input type="text" id="filterCorreo" class="form-control" placeholder="Correo"></th>
@@ -37,7 +37,7 @@
                             <th>Nombre</th>
                             <th>Correo</th>
                             <th>Dependencia</th>
-                            <th></th>
+                            <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="inscriptosTableBody">
@@ -49,14 +49,29 @@
                             <td>{{ un_asistente.user.email }}</td>
                             <td>{{ un_asistente.dependencia.nombre_corto.upper}}</td>
                             <td class="text-center">
-                            <div class="btn-group" role="group">
-                                {% comment %} <a class="btn btn-warning btn-sm" href="{% url 'ver_inscriptos' actividad.id %}" role="button">{% bs_icon 'eye' %}</a> {% endcomment %}
-                                <a class="btn btn-info btn-sm" href="{% url 'admin:core_actividad_change' actividad.id %}" role="button">{% bs_icon 'ticket' %}</a>
-                                {% comment %} <form action="{% url 'admin:core_actividad_delete' actividad.id %}" method="post" style="display: inline">
-                                    {% csrf_token %}
-                                    <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>
-                                </form> {% endcomment %}
-                            </div>
+                                <div class="btn-group" role="group">
+                                    {% comment %} <a class="btn btn-warning btn-sm" href="{% url 'ver_inscriptos' actividad.id %}" role="button">{% bs_icon 'eye' %}</a> {% endcomment %}
+                                
+                                    <!-- Ver más información del inscripto -->
+                                    <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal"
+                                        onclick="setModalDetails('{{ un_asistente.pk }}', '{{ un_asistente.user.first_name }}', '{{ un_asistente.user.last_name }}', '{{ un_asistente.user.email }}', '{{ un_asistente.documento }}', '{{ un_asistente.cuit }}', '{{ un_asistente.fecha_nacimiento }}', '{{ un_asistente.telefono_personal }}', '{{ un_asistente.telefono_emergencia }}', '{{ un_asistente.dependencia }}', '{{ un_asistente.grupo_sanguineo }}', '{{ un_asistente.regimen_comida }}', '{{ un_asistente.regimen_comida_otro }}', '{{ un_asistente.alergia }}', '{{ un_asistente.alergia_otro }}', '{{ un_asistente.medicamento }}', '{{ un_asistente.medicamento_otro }}')">
+                                        {% bs_icon 'eye' %}
+                                    </button>
+                                    
+                                    <!-- Editar inscripto -->
+                                    <a class="btn btn-warning btn-sm" href="{% url 'admin_editar_asistente' pk=un_asistente.pk actividad_id=actividad.pk %}" role="button">{% bs_icon 'pencil-square' %}</a>
+                                    
+                                    <!-- Eliminar inscripción -->
+                                    <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                        data-url="{% url 'admin_eliminar_inscripto_actividad' pk=un_asistente.pk actividad_id=actividad.pk %}"
+                                        onclick="setDeleteFormAction(this.dataset.url); event.preventDefault();">
+                                        {% bs_icon 'trash3' %}
+                                    </button>
+
+                                    <!-- Enviar entrada-->
+                                    <a class="btn btn-info btn-sm" href="" role="button">{% bs_icon 'ticket' %}</a>
+
+                                </div>
                             </td>
                         </tr>
                         {% endfor %}
@@ -66,6 +81,70 @@
         </div>
     </div>
 
+    <!-- Modal de Confirmación -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ¿Está seguro de que desea eliminar esta inscripción?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form id="deleteForm" action="" method="post" style="display: inline">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Información del Inscripto -->
+    <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">Detalles del Usuario Asistente</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <p><strong>Nombre:</strong> <span id="modalNombre"></span></p>
+                    <p><strong>Apellido:</strong> <span id="modalApellido"></span></p>
+                    <p><strong>Correo Electrónico:</strong> <span id="modalEmail"></span></p>
+                    <p><strong>Documento:</strong> <span id="modalDocumento"></span></p>
+                    <p><strong>Cuit:</strong> <span id="modalCuit"></span></p>
+                    <p><strong>Fecha de Nacimiento:</strong> <span id="modalFechaNacimiento"></span></p>
+                    <p><strong>Teléfono Personal:</strong> <span id="modalTelefonoPersonal"></span></p>
+                    <p><strong>Teléfono de Emergencia:</strong> <span id="modalTelefonoEmergencia"></span></p>
+                    <p><strong>Dependencia:</strong> <span id="modalDependencia"></span></p>
+                    <p><strong>Grupo Sanguíneo:</strong> <span id="modalGrupoSanguineo"></span></p>
+                    <p><strong>Régimen Comida:</strong> <span id="modalRegimenComida"></span></p>
+                    <p><strong>Otro Régimen Comida:</strong> <span id="modalRegimenComidaOtro"></span></p>
+                    <p><strong>Alergias:</strong> <span id="modalAlergias"></span></p>
+                    <p><strong>Otra Alergia:</strong> <span id="modalOtraAlergia"></span></p>
+                    <p><strong>Medicamentos:</strong> <span id="modalMedicamentos"></span></p>
+                    <p><strong>Otro Medicamento:</strong> <span id="modalOtroMedicamento"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal-body {
+            text-align: center; 
+        }
+        .modal-title {
+            margin: 0 auto; 
+        }
+    
+    </style>
 {% endblock %}
 
 
@@ -100,6 +179,30 @@
                 });
             });
         });
+        
+        function setDeleteFormAction(url) {
+            document.getElementById('deleteForm').action = url;
+        }
+
+        function setModalDetails(pk, nombre, apellido, email, documento, cuit, fechaNacimiento, telefonoPersonal, telefonoEmergencia, dependencia, grupoSanguineo, regimenComida, regimenComidaOtro, alergias, otraAlergia, medicamentos, otroMedicamento) {
+            document.getElementById('modalNombre').innerText = nombre;
+            document.getElementById('modalApellido').innerText = apellido.toUpperCase();
+            document.getElementById('modalEmail').innerText = email;
+            document.getElementById('modalDocumento').innerText = documento;
+            document.getElementById('modalCuit').innerText = cuit;
+            document.getElementById('modalFechaNacimiento').innerText = fechaNacimiento;
+            document.getElementById('modalTelefonoPersonal').innerText = telefonoPersonal;
+            document.getElementById('modalTelefonoEmergencia').innerText = telefonoEmergencia;
+            document.getElementById('modalDependencia').innerText = dependencia;
+            document.getElementById('modalGrupoSanguineo').innerText = grupoSanguineo;
+            document.getElementById('modalRegimenComida').innerText = regimenComida;
+            document.getElementById('modalRegimenComidaOtro').innerText = regimenComidaOtro;
+            document.getElementById('modalAlergias').innerText = alergias;
+            document.getElementById('modalOtraAlergia').innerText = otraAlergia;
+            document.getElementById('modalMedicamentos').innerText = medicamentos;
+            document.getElementById('modalOtroMedicamento').innerText = otroMedicamento;
+        }
+
 </script>
 
 {% endblock %}

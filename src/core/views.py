@@ -365,3 +365,47 @@ def envio_correos_entradas(request, actividad_id):
         return redirect('staff_home')  # Redirige a la vista deseada
     else:
         return redirect('home')  # Redirige a la vista deseada
+
+class EliminarInscriptoActividad(UserPassesTestMixin, View):
+    
+    
+    # valida que sea staff
+    def test_func(self):
+        return self.request.user.is_staff 
+
+    def post(self, request, pk, actividad_id):
+        # Obtengo al asistente inscripto mediante su pk
+        inscripto = get_object_or_404(UserAsistente, pk=pk)
+        
+        # Obtengo la actividad mediante su id
+        actividad = get_object_or_404(Actividad, pk=actividad_id)
+
+        # Elimino la relación entre el asistente y la actividad
+        actividad.asistentes.remove(inscripto)
+
+        messages.success(request, "Inscripción eliminada con éxito.")
+
+        # Redirijo al listado de inscriptos de la actividad
+        return redirect('ver_inscriptos', actividad_id=actividad.id)
+
+class EditarAsistenteAdmin(UserPassesTestMixin, UpdateView):
+    model = UserAsistente
+    form_class = AsistenteUpdateForm
+   
+    template_name = 'usuarios/update_uno.html'
+
+    # valida que sea staff
+    def test_func(self):
+        return self.request.user.is_staff 
+    
+    # Redirecciona a la lista de inscriptos de la actividad
+    def get_success_url(self):
+        actividad_id = self.kwargs['actividad_id']
+        return reverse_lazy('ver_inscriptos', kwargs={'actividad_id': actividad_id})
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Agrega un título para la página
+        context['title'] = 'Actualizar datos del Asistente'
+        return context

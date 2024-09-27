@@ -359,17 +359,21 @@ class EliminarInscriptoActividad(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_staff 
 
-    def post(self, request, pk, actividad_id):
+    def post(self, request, pk, actividad_id):    
         # Obtengo al asistente inscripto mediante su pk
         inscripto = get_object_or_404(UserAsistente, pk=pk)
         
         # Obtengo la actividad mediante su id
         actividad = get_object_or_404(Actividad, pk=actividad_id)
 
-        # Elimino la relación entre el asistente y la actividad
-        actividad.asistentes.remove(inscripto)
+        cupo = actividad.aula.cupo
 
-        messages.success(request, "Inscripción eliminada con éxito.")
+        if inscripto in actividad.asistentes.all():
+            if actividad.asistentes.count() < cupo+1:
+                actividad.habilitada = True
+                actividad.save()
+            actividad.asistentes.remove(inscripto)
+            messages.success(request, "Inscripción eliminada con éxito.")
 
         # Redirijo al listado de inscriptos de la actividad
         return redirect('ver_inscriptos', actividad_id=actividad.id)
@@ -411,7 +415,7 @@ class InscribirAsistenteAdmin(UserPassesTestMixin, View):
                 
                 if actividad.inscripcion:
                     if user_asistente not in actividad.asistentes.all():
-                        if actividad.asistentes.count() >= cupo and cupo != 0:
+                        if actividad.asistentes.count() >= cupo and cupo != 0:    
                             actividad.habilitada = False
                             actividad.save()
                         actividad.asistentes.add(user_asistente)   

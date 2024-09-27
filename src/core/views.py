@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
-from django.http import HttpResponseNotAllowed
+from django.http import Http404, HttpResponseNotAllowed
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -313,8 +313,11 @@ class InscriptosActividad(LoginRequiredMixin, UserPassesTestMixin, ListView):
     def get_context_data(self, **kwargs): 
         context = super().get_context_data(**kwargs)
         # Agregamos la actividad al contexto, si deseas mostrar más información
+        actividad = Actividad.objects.get(pk=self.kwargs['actividad_id'])
         context['actividad'] = Actividad.objects.get(pk=self.kwargs['actividad_id'])
         context['asistentes'] = Actividad.objects.get(pk=self.kwargs['actividad_id']).asistentes.all()
+        context['tiene_cupos'] = actividad.asistentes.count() < actividad.aula.cupo
+        context['inscripcion_abierta'] = actividad.inscripcion
         return context
 
 
@@ -392,3 +395,31 @@ class EditarAsistenteAdmin(UserPassesTestMixin, UpdateView):
         # Agrega un título para la página
         context['title'] = 'Actualizar datos del Asistente'
         return context
+class InscribirAsistenteAdmin(UserPassesTestMixin, View):
+    
+    def test_func(self):
+        return self.request.user.is_staff  
+
+    def post(self, request, actividad_id):
+        dni = request.POST.get('dni')
+        actividad = get_object_or_404(Actividad, id=actividad_id)
+        cupo = actividad.aula.cupo
+        
+        if dni:
+            try:
+                user_asistente = get_object_or_404(UserAsistente, documento=dni)
+                
+                if actividad.inscripcion:
+                    if user_asistente not in actividad.asistentes.all():
+                        if actividad.asistentes.count() >= cupo and cupo != 0:
+                            actividad.habilitada = False
+                            actividad.save()
+                        actividad.asistentes.add(user_asistente)   
+                return redirect('ver_inscriptos', actividad_id=actividad.id)  
+            except Http404:
+                messages.error(request, "El asistente a inscribir no existe.", extra_tags='inscribir_asistente')
+                return redirect('ver_inscriptos', actividad_id=actividad.id)
+
+    def get(self, request, *args, **kwargs):
+        return HttpResponseNotAllowed(['POST'])
+

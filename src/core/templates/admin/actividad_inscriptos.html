@@ -7,15 +7,14 @@
             </div>
             <div style='display: flex; justify-content: center; align-items: center;'>
                 <div class="btn-group" role="group">
-                    <a class="btn btn-primary btn-sm" style="height: 35px;" href="#" role="button" target="_blank">Inscribir</a>
                     <a class="btn btn-info btn-sm " style="height: 35px;" href="#" role="button">Enviar Entradas</a>
                     <form action="#" method="post" style="display: inline">
                         {% csrf_token %}<button class="btn btn-success btn-sm" style="height: 35px;" type="submit">Permitir Inscripciones</button>
                     </form>
                     <form action="#" method="post" style="display: flex; flex-direction: column; align-items: center;">
                         {% csrf_token %}
-                        <button class="btn btn-danger btn-sm" type="submit" style="height: 35px; width: 130px;">Actualizar cupo</button>
-                        <input type='numer' name='nuevocupo' placeholder="{{actividad.aula.cupo}}" alt='0 es sin limite' style="height: 35px; width: 130px; margin-top: 2px;">
+                        <button class="btn btn-primary btn-sm" type="submit" style="height: 35px; width: 130px;">Inscribir</button>
+                        <input type='number' name='dni' placeholder="DNI" style="height: 35px; width: 130px; margin-top: 2px;">
                     </form>
                 </div>
             </div>

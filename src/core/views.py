@@ -13,9 +13,10 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from tablib import Dataset
 import threading
+from datetime import date
 
 # Create your views here.
-from .models import UserAsistente, UserCoordinador, Actividad, Dependencia
+from .models import UserAsistente, UserCoordinador, Actividad, Dependencia, Sponsors
 from .forms import UsuariosForm, AsistenteUpdateForm,generar_cadena_alternante
 from .mixins import GroupRequiredMixin
 from .resources import AsistenteResource, CoordinadorResource
@@ -56,6 +57,22 @@ class PerfilHome(LoginRequiredMixin, View):
                 return redirect('home')
         else:
             return redirect('home')
+
+class LandingPage(TemplateView):
+    model = Actividad
+    template_name = 'landing/home.html'
+    context_object_name = 'actividades'
+    
+    def get_context_data(self, **kwargs):
+        # En el Contexto se van a renderizar segun la fecha de la actividad, para poder mostrarlas mas facil en el home
+        context = super().get_context_data(**kwargs)
+        actividades = Actividad.objects.filter(inscripcion=True).all()
+        context['actividades'] = actividades
+        context['actividad_25'] = actividades.filter(fecha=date(2024, 10, 25)).all()
+        context['actividad_26']= actividades.filter(fecha=date(2024,10,26)).all()
+        context['actividad_27']= actividades.filter(fecha=date(2024,10,27)).all()
+        context['sponsors'] = Sponsors.objects.all()
+        return context
 
 
 ###############################Coordinador########################################################################################################################
@@ -359,7 +376,8 @@ class EliminarInscriptoActividad(UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_staff 
 
-    def post(self, request, pk, actividad_id):    
+    def post(self, request, pk, actividad_id):
+
         # Obtengo al asistente inscripto mediante su pk
         inscripto = get_object_or_404(UserAsistente, pk=pk)
         
@@ -399,6 +417,8 @@ class EditarAsistenteAdmin(UserPassesTestMixin, UpdateView):
         # Agrega un título para la página
         context['title'] = 'Actualizar datos del Asistente'
         return context
+
+      
 class InscribirAsistenteAdmin(UserPassesTestMixin, View):
     
     def test_func(self):
@@ -426,4 +446,3 @@ class InscribirAsistenteAdmin(UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
-

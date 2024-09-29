@@ -124,10 +124,8 @@ def generar_ruta_unica(instance, filename):
     ext = filename.split('.')[-1]
     # Crear un nombre de archivo único usando UUID
     filename = '{}.{}'.format(uuid4(),ext)
-    # Generar una carpeta con el tipo y nombre de la actividad
-    actividad_nombre = slugify(instance.id)
     # Devolver la ruta completa donde se almacenará la imagen
-    return os.path.join('portadas', actividad_nombre, filename)
+    return os.path.join('portadas', filename)
 
 class Actividad(models.Model):
     tipo = models.CharField(max_length=150)
@@ -138,7 +136,8 @@ class Actividad(models.Model):
     hora_final = models.TimeField(default='00:00')
     orador = models.CharField(max_length=100)
     aula = models.ForeignKey('Aula', related_name='AulaActividad', on_delete=models.CASCADE)
-    portada = models.ImageField(upload_to=generar_ruta_unica, default='#')
+    portada = models.ImageField(
+        upload_to=generar_ruta_unica, default='#')
     asistentes = models.ManyToManyField(UserAsistente, blank=True)
     habilitada = models.BooleanField(default=True)
     inscripcion = models.BooleanField(default=False)
@@ -166,3 +165,20 @@ class Actividad(models.Model):
             # Devolver el número de lugares restantes
             return self.aula.cupo - self.asistente.count()
 
+
+def generar_ruta_unica_sponsor(instance, filename):
+    # Extraer la extensión del archivo
+    ext = filename.split('.')[-1]
+    # Crear un nombre de archivo único usando UUID
+    filename = '{}.{}'.format(uuid4(),ext)
+    # Devolver la ruta completa donde se almacenará la imagen
+    return os.path.join('sponsor', filename)
+
+
+class Sponsors(models.Model):
+    nombre = models.CharField(max_length=50)
+    url = models.URLField()
+    logo = models.ImageField(upload_to=generar_ruta_unica_sponsor)
+    
+    def __str__(self):
+        return '{}'.format(self.nombre.title())

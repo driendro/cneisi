@@ -333,7 +333,6 @@ class InscriptosActividad(LoginRequiredMixin, UserPassesTestMixin, ListView):
         actividad = Actividad.objects.get(pk=self.kwargs['actividad_id'])
         context['actividad'] = Actividad.objects.get(pk=self.kwargs['actividad_id'])
         context['asistentes'] = Actividad.objects.get(pk=self.kwargs['actividad_id']).asistentes.all()
-        context['tiene_cupos'] = actividad.asistentes.count() < actividad.aula.cupo
         context['inscripcion_abierta'] = actividad.inscripcion
         return context
 

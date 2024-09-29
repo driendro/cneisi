@@ -13,7 +13,7 @@
                     </form>
                     <form action="{% url 'admin_inscribir_asistente' actividad_id=actividad.id %}" method="post" style="display: flex; flex-direction: column; align-items: center;">
                         {% csrf_token %}
-                        <button class="btn btn-primary btn-sm" type="submit" style="height: 35px; width: 130px;" {% if not tiene_cupos or not inscripcion_abierta %}disabled{% endif %}>Inscribir</button>
+                        <button class="btn btn-primary btn-sm" type="submit" style="height: 35px; width: 130px;" {% if not inscripcion_abierta %}disabled{% endif %}>Inscribir</button>
                         <input type='number' name='dni' placeholder="DNI" style="height: 35px; width: 130px; margin-top: 2px;">
                     </form>
                     {% for message in messages %}

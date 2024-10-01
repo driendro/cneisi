@@ -4,5 +4,5 @@ active/*
 *__pycache__*
 public*
 .env
-*db.sqlite3
 src/cneisi.sqlite3
+

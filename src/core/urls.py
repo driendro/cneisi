@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 
 from core.views import (
     EliminarInscriptoActividad,
+    InscribirAsistenteAdmin,
     EditarAsistenteAdmin,
     PerfilHome,
     InscriptosList,
@@ -64,19 +65,12 @@ urlpatterns = [
     
     #Admin_Staff###################################################################
     path('admin', StaffHome.as_view(), name='staff_home'),
-    path('admin/abrir_inscripciones',
-         abir_inscripciones, name='abrir_inscripciones'),
+    path('admin/abrir_inscripciones', abir_inscripciones, name='abrir_inscripciones'),
     path('admin/cerrar_inscripciones', cerrar_inscripciones, name='cerrar_inscripciones'),
     path('admin/enviar_correo', envio_correos_inscripcion, name='enviar_correos'),
-    path('admin/ver_inscriptos/<int:actividad_id>',
-         InscriptosActividad.as_view(), name='ver_inscriptos'),
-    
-    path('admin/user/<int:pk>/ver', DetalleAsistente.as_view(),
-         name='admin_ver_asistente'),
-
-    path('admin/<int:pk>/eliminar/<int:actividad_id>/', EliminarInscriptoActividad.as_view(),
-         name='admin_eliminar_inscripto_actividad'),
-
-    path('admin/user/<int:pk>/editar/<int:actividad_id>/', EditarAsistenteAdmin.as_view(),
-         name='admin_editar_asistente')
+    path('admin/ver_inscriptos/<int:actividad_id>', InscriptosActividad.as_view(), name='ver_inscriptos'),
+    path('admin/user/<int:pk>/ver', DetalleAsistente.as_view(), name='admin_ver_asistente'),
+    path('admin/<int:pk>/eliminar/<int:actividad_id>/', EliminarInscriptoActividad.as_view(), name='admin_eliminar_inscripto_actividad'),
+    path('admin/user/<int:pk>/editar/<int:actividad_id>/', EditarAsistenteAdmin.as_view(), name='admin_editar_asistente'),
+    path('admin/inscribir/<int:actividad_id>/', InscribirAsistenteAdmin.as_view(), name='admin_inscribir_asistente')
 ]

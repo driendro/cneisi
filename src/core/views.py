@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.conf import settings
+from django.http import JsonResponse
 from django.core.mail import EmailMultiAlternatives
 from django.http import Http404, HttpResponseNotAllowed
 from django.urls import reverse_lazy
@@ -196,7 +197,23 @@ class DetalleAsistente(GroupRequiredMixin, DetailView):
         context['actividades_inscriptas'] = actividades_inscritas
         return context
     
+class VerActividades(View):
+    def get(self, request, pk):
+        user_asistente = get_object_or_404(UserAsistente, pk=pk)
 
+        actividades_inscritas = Actividad.objects.filter(asistentes=user_asistente)
+
+        actividades_data = [
+            {
+                'nombre': actividad.nombre,
+                'fecha': actividad.fecha.strftime("%Y-%m-%d"),  # Formato de fecha
+                'hora_inicio': actividad.hora_inicio.strftime("%H:%M"),  # Formato de hora
+                'aula': actividad.aula.nombre
+            }
+            for actividad in actividades_inscritas
+        ]
+        
+        return JsonResponse({'actividades_inscriptas': actividades_data})
 
 ###############################Asistente########################################################################################################################
 ###############################Asistente########################################################################################################################

@@ -5,14 +5,14 @@
 {% block content %}
 
 <!-- Imagen de fondo -->
-<div class="image-background" style="background-image: url('https://www.frlp.utn.edu.ar/sites/default/files/2020-02/web%201.jpg');">
+<div class="image-background" style="background-image: url('{% static '..\static\img\fondo 1400X600.jpg' %}');">
 </div>
 
 
 <div class="container py-4 content-foreground">
   <div class="row">
     {% if actividades_inscritas %}
-      <h1 class='text-center titulo-blanco'>Actividades en las que estás anotado</h1>
+      <h1 class='text-center'>Actividades en las que estás anotado</h1>
       <div class="table-responsive">
         <table class="table table-cover">
           <thead>
@@ -43,7 +43,7 @@
     {% endif %}
 
     {% if actividades_no_inscritas %}
-    <h1 class='text-center titulo-blanco'>Actividades disponibles</h1>
+    <h1 class='text-center'>Actividades disponibles</h1>
       <div class="card-group">
         {% for actividad in actividades_no_inscritas %}
         <div class="card activity-card mx-2 my-3" style="max-width: 340px; position: relative;">
@@ -90,22 +90,27 @@
 </div>
 
 <style>
-  /* Cambia el color del título "Actividades disponibles" a blanco */
-  .titulo-blanco {
-    color: #489ACE; 
-    font-size: 3rem; /* Tamaño grande del texto */
-    font-weight: bold; /* Resaltar el título */
-    text-align: center; /* Centrado */
-    text-transform: uppercase; /* Convertir a mayúsculas */
-    letter-spacing: 2px; /* Espacio entre letras */
-    position: relative; /* Posición para aplicar la sombra 3D */
-    text-shadow: 2px 2px 0 #1B2C3B, /* Sombras para efecto 3D */
-                 4px 4px 0 #1B2C3B,
-                 6px 6px 0 #1B2C3B,
-                 8px 8px 0 #1B2C3B,
-                 10px 10px 0 #1B2C3B; /* Ajusta la cantidad para más profundidad */
+  @font-face {
+    font-family: 'Planc';
+    src: url("{% static 'fonts/Planc_wfx/Planc-BoldItalic.otf' %}") format('opentype');
+    font-weight: 600;
+    font-style: normal;
   }
-
+  
+  h1, .text-center {
+    font-family: 'Planc', sans-serif; /* Usa la fuente 'Planc' */
+    font-weight: 600; /* Aplica el peso de la fuente */
+    letter-spacing: 1px; /* Espaciado entre letras para hacerlo más condensado */
+    text-transform: uppercase; /* Texto en mayúsculas */
+    color: #FFFFFF; /* Color blanco */
+    text-align: center; /* Centrado */
+    margin-top: 20px; /* Margen superior para separación */
+  }
+  
+  .text-center {
+    font-size: 28px; /* Ajusta el tamaño de la fuente para los textos centrados */
+  }
+  
   /* Imagen de fondo */
   .image-background {
     position: fixed;
@@ -115,10 +120,9 @@
     height: 100vh;
     object-fit: cover;
     z-index: -1;
-    background-image: url('ruta/de/tu/imagen.jpg'); /* Reemplaza con la ruta de tu imagen */
-    background-size: cover;
-    background-position: center;
-    filter: blur(5px); /* Aplica el desenfoque a la imagen de fondo */
+    background-size: cover; /* Hace que cubra toda la pantalla manteniendo la proporción */
+    background-repeat: no-repeat;
+    background-position: center; /* Centrar la imagen */
   }
 
   /* Contenido que se superpone a la imagen de fondo */
@@ -133,17 +137,15 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra horizontalmente la tarjeta */
-    border: 3px solid #1B2C3B; /* Borde más grueso y con el color especificado */
-    border-radius: 8px; /* Esquinas redondeadas (ajustable) */
-    padding: 15px; /* Añadir padding para dar espacio interno */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
-    transition: box-shadow 0.3s ease-in-out; /* Transición para sombra */
-    background: white; /* Fondo blanco para la tarjeta */
+    align-items: center;
+    padding: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    transition: box-shadow 0.3s ease-in-out;
+    width: 100%; /* Asegura que las tarjetas ocupen el 100% del ancho disponible */
   }
 
   .activity-card:hover {
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Aumentar sombra al hacer hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8); /* Aumentar sombra al hacer hover */
   }
 
   .card-img-container {
@@ -164,6 +166,16 @@
     margin: 10px 0; /* Ajuste de márgenes para mantener separación */
   }
 
+  /* Definir la animación de desplazamiento de abajo hacia arriba */
+  @keyframes slideUp {
+    0% {
+      transform: translateY(100%); /* Empieza desde la parte inferior */
+    }
+    100% {
+      transform: translateY(0); /* Llega a su posición original */
+    }
+  }
+  
   /* Oculta la capa de la descripción por defecto */
   .card-overlay {
     position: absolute;
@@ -171,18 +183,47 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(27, 44, 59, 0.8); /* Fondo con transparencia */
+    background: #1B2C3B; /* Fondo con color sólido */
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
+    transform: translateY(100%); /* Posición inicial fuera de la tarjeta */
+    opacity: 1; /* Mostrar opacidad completa */
+    transition: transform 0.5s ease-in-out;
+    padding: 0; /* Asegura que no haya relleno */
+    margin: 0; /* Asegura que no haya margen */
+    z-index: 2; /* Asegura que la capa esté sobre otros elementos */
   }
-
-  /* Muestra la capa de la descripción al pasar el mouse */
+  
+  /* Muestra y anima la capa al hacer hover */
   .activity-card:hover .card-overlay {
-    opacity: 1;
+    transform: translateY(0); /* Llega a su posición original */
+    transition: transform 0.5s ease-in-out; /* Anima la transición */
+    animation: slideUp 0.5s ease-in-out forwards; /* Activa la animación */
+    animation-direction: normal; /* Desplazamiento hacia arriba */
+  }
+  
+  /* Estilo para asegurar que la tarjeta tiene altura y tamaño adecuado */
+  .activity-card {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0; /* Ajusta el padding a 0 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    width: 100%;
+    max-width: 340px;
+    margin: 0; /* Asegura que no haya margen */
+    height: 100%; /* Asegura que ocupe el 100% de la altura */
+  }
+  
+  /* Asegúrate de que el contenedor de la imagen no tiene márgenes */
+  .card-img-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   /* Contenido de la capa de la descripción */

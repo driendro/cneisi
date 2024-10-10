@@ -2,8 +2,8 @@
 
 <div class="container-fluid">
   <div
-    class="row justify-content-center align-items-center"
-    style="height: 90vh"
+    class="d-flex flex-column justify-content-center align-items-center"
+    style="min-height: 90vh;"
   >
     <div
       class="col-10 col-lg-10 col-xl-6"
@@ -11,6 +11,7 @@
         background: #eee;
         border-radius: 2%;
         padding: 2.5rem;
+        margin-top: 3%;
         text-align: center;
       "
     >
@@ -24,13 +25,13 @@
         <p><strong>Documento:</strong> {{ user_asistente.documento }}</p>
         <p><strong>Cuit:</strong> {{ user_asistente.cuit }}</p>
         <p>
-          <strong>Fecha de Nacimiento:</strong> {{user_asistente.fecha_nacimiento }}
+          <strong>Fecha de Nacimiento:</strong> {{ user_asistente.fecha_nacimiento }}
         </p>
         <p>
           <strong>Teléfono Personal:</strong> {{ user_asistente.telefono_personal }}
         </p>
         <p>
-          <strong>Teléfono de Emergencia:</strong> {{user_asistente.telefono_emergencia }}
+          <strong>Teléfono de Emergencia:</strong> {{ user_asistente.telefono_emergencia }}
         </p>
         <p><strong>Dependencia:</strong> {{ user_asistente.dependencia }}</p>
         <p>
@@ -40,16 +41,39 @@
           <strong>Régimen Comida:</strong> {{ user_asistente.regimen_comida }}
         </p>
         <p>
-          <strong>Otro Régimen Comida:</strong> {{user_asistente.regimen_comida_otro }}
+          <strong>Otro Régimen Comida:</strong> {{ user_asistente.regimen_comida_otro }}
         </p>
         <p><strong>Alergias:</strong> {{ user_asistente.alergia }}</p>
         <p><strong>Otra Alergia:</strong> {{ user_asistente.alergia_otro }}</p>
         <p><strong>Medicamentos:</strong> {{ user_asistente.medicamento }}</p>
         <p>
-          <strong>Otro Medicamento:</strong> {{ user_asistente.medicamento_otro}}
+          <strong>Otro Medicamento:</strong> {{ user_asistente.medicamento_otro }}
         </p>
+      </div>     
+    </div>
+
+    <div
+      class="col-10 col-lg-10 col-xl-6"
+      style="
+        background: #eee;
+        border-radius: 2%;
+        padding: 2.5rem;
+        margin-top: 3%;
+        margin-bottom: 3%;
+        text-align: center;
+      "
+    >
+      <h2 class="fw-bolder text-center">Actividades Inscriptas</h2>
+      <div class="center-block" style="margin-bottom: 5%">
+        {% for actividad in actividades_inscriptas %}           
+          <p><strong>{{ actividad.nombre }}</strong> - {{ actividad.fecha }} - <strong>Horario: </strong> {{ actividad.hora_inicio }} - <strong>Aula: </strong>{{actividad.aula.nombre}}</p>   
+          
+          {% empty %}
+            <p>El usuario no está inscripto en ninguna actividad.</p>
+        {% endfor %}    
       </div>
     </div>
   </div>
 </div>
+
 {% endblock %}

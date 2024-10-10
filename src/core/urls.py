@@ -37,7 +37,8 @@ from core.views import (
     cerrar_inscripciones,
     envio_correos_inscripcion,
     envio_correos_entradas,
-    InscriptosActividad
+    InscriptosActividad,
+    VerActividades
 )
 
 urlpatterns = [
@@ -55,6 +56,7 @@ urlpatterns = [
          name='coordinador_eliminar_asistente'),
     path('coordinador/user/<int:pk>/ver', DetalleAsistente.as_view(),
          name='coordinador_ver_asistente'),
+    path('coordinador/user/<int:pk>/ver_actividades/', VerActividades.as_view(),name='coordinador_ver_actividades'),
     
     #Asistente###################################################################
     path('asistente', AsistenteHome.as_view(), name='asistente_home'),

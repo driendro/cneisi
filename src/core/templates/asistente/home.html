@@ -237,6 +237,76 @@
     align-items: center; /* Centra horizontalmente el contenido */
     height: 100%; /* Asegura que el contenido ocupe toda la altura */
   }
+
+  /* Punto de quiebre para pantallas más pequeñas */
+  @media (max-width: 768px) {
+    .card-group {
+      display: flex;
+      flex-direction: column; /* Coloca las tarjetas en una columna */
+      align-items: center;
+    }
+
+    .activity-card {
+      width: 100%; /* Asegura que las tarjetas ocupen el 100% del ancho disponible en pantallas pequeñas */
+      max-width: none; /* Elimina la limitación del ancho */
+      margin: 10px 0; /* Añade margen vertical entre las tarjetas */
+    }
+
+    .table-responsive {
+      overflow-x: auto; /* Permite el desplazamiento horizontal en tablas grandes */
+    }
+
+    .content-foreground {
+      padding: 20px; /* Reduce el padding en dispositivos más pequeños */
+    }
+
+    h1, .text-center {
+      font-size: 22px; /* Reduce el tamaño de las fuentes en pantallas más pequeñas */
+    }
+  }
+
+  /* Ajustes adicionales para pantallas aún más pequeñas (como teléfonos móviles) */
+  @media (max-width: 576px) {
+    .activity-card {
+      flex-direction: column; /* Asegura que el contenido de las tarjetas se apile verticalmente */
+    }
+
+    h1, .text-center {
+      font-size: 18px; /* Reduce aún más el tamaño de los títulos en pantallas muy pequeñas */
+    }
+
+    .image-background {
+      background-size: cover; /* Mantén la imagen de fondo cubriendo toda la pantalla */
+    }
+
+    .card-overlay-content {
+      padding: 10px; /* Ajusta el padding en la capa de superposición */
+    }
+
+    /* Ajustes para las tablas en dispositivos móviles */
+    .table-cover thead {
+      display: none; /* Oculta la cabecera de la tabla */
+    }
+
+    .table-cover tbody tr {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 15px; /* Añade separación entre filas */
+    }
+
+    .table-cover td {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .table-cover td::before {
+      content: attr(data-label); /* Añade etiquetas para cada columna */
+      font-weight: bold;
+      margin-right: 10px;
+    }
+  }
 </style>
 
 

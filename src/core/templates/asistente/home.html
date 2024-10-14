@@ -10,7 +10,7 @@
 
 
 <div class="container py-4 content-foreground">
-  <div class="row">
+  <div class="row justify-content-center">
     {% if actividades_inscritas %}
       <h1 class='text-center'>Actividades en las que estás anotado</h1>
       <div class="table-responsive">
@@ -44,37 +44,39 @@
 
     {% if actividades_no_inscritas %}
     <h1 class='text-center'>Actividades disponibles</h1>
-      <div class="card-group">
+      <div class="row justify-content-center">
         {% for actividad in actividades_no_inscritas %}
-        <div class="card activity-card mx-2 my-3" style="max-width: 340px; position: relative;">
-          <!-- Contenedor para la imagen -->
-          <div class="card-img-container">
-            <img src="{{ actividad.portada.url }}" class="card-img-top" alt="{{ actividad.nombre }}" />
-          </div>
-          
-          <!-- Contenido de la card -->
-          <div class="card-body">
-            <!-- Título de la actividad -->
-            <h4 class="card-title">{{ actividad.nombre|truncatewords:10 }}</h4>
-            <p><strong>Orador:</strong> {{ actividad.orador }}</p>
-            <p><strong>Hora:</strong> {{ actividad.hora_inicio }} - {{ actividad.hora_final }}</p>
-            <p><strong>Aula:</strong> {{ actividad.aula.nombre }}</p>
-          </div>
+        <div class="col-md-4 col-sm-6 mb-4 d-flex align-items-stretch">
+          <div class="card activity-card" style="max-width: 340px; position: relative; width: 100%;">
+            <!-- Contenedor para la imagen -->
+            <div class="card-img-container">
+              <img src="{{ actividad.portada.url }}" class="card-img-top" alt="{{ actividad.nombre }}" />
+            </div>
+            
+            <!-- Contenido de la card -->
+            <div class="card-body">
+              <!-- Título de la actividad -->
+              <h4 class="card-title">{{ actividad.nombre|truncatewords:10 }}</h4>
+              <p><strong>Orador:</strong> {{ actividad.orador }}</p>
+              <p><strong>Hora:</strong> {{ actividad.hora_inicio }} - {{ actividad.hora_final }}</p>
+              <p><strong>Aula:</strong> {{ actividad.aula.nombre }}</p>
+            </div>
 
-          <!-- Capa de información adicional con animación -->
-          <div class="card-overlay">
-            <div class="card-overlay-content">
-              <p>{{ actividad.descripcion|truncatechars:100 }}</p>
-              {% if actividad.habilitada and actividad.inscripcion %}
-                <form action="{% url 'actividad_inscribirse' actividad.id %}" method="post">
-                  {% csrf_token %}
-                  <button type="submit" class="btn btn-primary">Inscribirse</button>
-                </form>
-              {% elif actividad.habilitada and not actividad.inscripcion %}
-                <button class="btn btn-secondary">Inscripción cerrada</button>
-              {% else %}
-                <button class="btn btn-secondary">Sin Cupo</button>
-              {% endif %}
+            <!-- Capa de información adicional con animación -->
+            <div class="card-overlay">
+              <div class="card-overlay-content">
+                <p>{{ actividad.descripcion|truncatechars:100 }}</p>
+                {% if actividad.habilitada and actividad.inscripcion %}
+                  <form action="{% url 'actividad_inscribirse' actividad.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Inscribirse</button>
+                  </form>
+                {% elif actividad.habilitada and not actividad.inscripcion %}
+                  <button class="btn btn-secondary">Inscripción cerrada</button>
+                {% else %}
+                  <button class="btn btn-secondary">Sin Cupo</button>
+                {% endif %}
+              </div>
             </div>
           </div>
         </div>
@@ -107,10 +109,6 @@
     margin-top: 20px; /* Margen superior para separación */
   }
   
-  .text-center {
-    font-size: 28px; /* Ajusta el tamaño de la fuente para los textos centrados */
-  }
-  
   /* Imagen de fondo */
   .image-background {
     position: fixed;
@@ -133,15 +131,15 @@
 
   /* Estilos para la tarjeta de actividad */
   .activity-card {
-    position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    align-items: center;
     padding: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
     transition: box-shadow 0.3s ease-in-out;
-    width: 100%; /* Asegura que las tarjetas ocupen el 100% del ancho disponible */
+    width: 100%;
+    min-width: 200px; /* Ancho mínimo para evitar colapsos */
+    max-width: 340px;
   }
 
   .activity-card:hover {

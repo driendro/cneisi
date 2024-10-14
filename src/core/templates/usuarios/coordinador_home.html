@@ -1,65 +1,139 @@
 {% extends 'base.html' %} {% load django_bootstrap5 %} {% load bootstrap_icons %} {% block content %}
 
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <h1>Listado de Inscriptos</h1>
-            </div>
-            <div style='display: flex; justify-content: center; align-items: center;'>
-                <a role="button" style='margin: 0 20px' href="{% url 'coordinador_inscribir_uno' %}" class="btn btn-primary btn-md">Añadir Inscripto</a>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <h1>Listado de Inscriptos</h1>
+        </div>
+        <div style='display: flex; justify-content: center; align-items: center;'>
+            <a role="button" style='margin: 0 20px' href="{% url 'coordinador_inscribir_uno' %}" class="btn btn-primary btn-md">Añadir Inscripto</a>
                 {% comment %} <a role="button" style='margin: 0 20px' href="{% url 'coordinador_inscribir_muchos' %}" class="btn btn-primary btn-md">Importar desde Excel</a> {% endcomment %}
-            </div>
+        </div>
 
-            <div class="col-md-12">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th><input type="text" id="filterApellido" class="form-control" placeholder="Apellido"></th>
-                            <th><input type="text" id="filterNombre" class="form-control" placeholder="Nombre"></th>
-                            <th><input type="text" id="filterDocumento" class="form-control" placeholder="Documento"></th>
-                            <th><input type="email" id="filterCorreo" class="form-control" placeholder="Correo"></th>
-                            <th><input type="text" id="filterCaracter" class="form-control" placeholder="Caracter"></th>
-                            <th><input type="text" id="filterDependencia" class="form-control" placeholder="Dependencia"></th>
-                            <th class="text-center">
-                                {% comment %} <button type="submit" class="btn btn-primary btn-sm">Filtrar</button> {% endcomment %}
-                            </th>
-                        </tr>
-                        <tr>
-                            <th>Apellido</th>
-                            <th>Nombre</th>
-                            <th>Documento</th>
-                            <th>Correo</th>
-                            <th>Caracter</th>
-                            <th>Dependencia</th>
-                            <th class="text-center">Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="inscriptosTableBody">
-                        {% for un_inscripto in object_list %}
-                        <tr>
-                            <td>{{ un_inscripto.user.last_name.upper }}</td>
-                            <td>{{ un_inscripto.user.first_name.title }}</td>
-                            <td>{{ un_inscripto.documento }}</td>
-                            <td>{{ un_inscripto.user.email }}</td>
-                            <td>{{ un_inscripto.caracter.title }}</td>
-                            <td>{{ un_inscripto.dependencia.nombre_corto.upper }}</td>
-                            <td class="text-center">
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th><input type="text" id="filterApellido" class="form-control" placeholder="Apellido"></th>
+                        <th><input type="text" id="filterNombre" class="form-control" placeholder="Nombre"></th>
+                        <th><input type="text" id="filterDocumento" class="form-control" placeholder="Documento"></th>
+                        <th><input type="email" id="filterCorreo" class="form-control" placeholder="Correo"></th>
+                        <th><input type="text" id="filterCaracter" class="form-control" placeholder="Caracter"></th>
+                        <th><input type="text" id="filterDependencia" class="form-control" placeholder="Dependencia"></th>
+                        <th class="text-center">
+                            {% comment %} <button type="submit" class="btn btn-primary btn-sm">Filtrar</button> {% endcomment %}
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Apellido</th>
+                        <th>Nombre</th>
+                        <th>Documento</th>
+                        <th>Correo</th>
+                        <th>Caracter</th>
+                        <th>Dependencia</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="inscriptosTableBody">
+                    {% for un_inscripto in object_list %}
+                    <tr>
+                        <td>{{ un_inscripto.user.last_name.upper }}</td>
+                        <td>{{ un_inscripto.user.first_name.title }}</td>
+                        <td>{{ un_inscripto.documento }}</td>
+                        <td>{{ un_inscripto.user.email }}</td>
+                        <td>{{ un_inscripto.caracter.title }}</td>
+                        <td>{{ un_inscripto.dependencia.nombre_corto.upper }}</td>
+                        <td class="text-center">
                             <div class="btn-group" role="group">
-                                <a class="btn btn-info btn-sm" href="{% url 'coordinador_ver_asistente' pk=un_inscripto.pk %}" role="button" target="_blank">{% bs_icon 'eye' %}</a>
+                                <!-- Ver más información del inscripto -->
+                                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal"
+                                    onclick="setModalDetails('{{ un_inscripto.user.first_name }}', '{{ un_inscripto.user.last_name }}', '{{ un_inscripto.user.email }}', '{{ un_inscripto.documento }}', '{{ un_inscripto.cuit }}', '{{ un_inscripto.fecha_nacimiento }}', '{{ un_inscripto.telefono_personal }}', '{{ un_inscripto.telefono_emergencia }}', '{{ un_inscripto.dependencia }}', '{{ un_inscripto.grupo_sanguineo }}', '{{ un_inscripto.regimen_comida }}', '{{ un_inscripto.regimen_comida_otro }}', '{{ un_inscripto.alergia }}', '{{ un_inscripto.alergia_otro }}', '{{ un_inscripto.medicamento }}', '{{ un_inscripto.medicamento_otro }}')">
+                                    {% bs_icon 'eye' %}
+                                </button>
+                                <!-- Ver actividades en las que está inscripto -->
+                                <button class="btn btn-info btn-sm" onclick="loadActividades('{{ un_inscripto.pk }}')">
+                                    {% bs_icon 'card-list' %}
+                                </button>
                                 <a class="btn btn-warning btn-sm" href="{% url 'coordinador_editar_asistente' pk=un_inscripto.pk %}" role="button">{% bs_icon 'pencil-square' %}</a>
                                 <form action="{% url 'coordinador_eliminar_asistente' pk=un_inscripto.pk %}" method="post" style="display: inline">
                                     {% csrf_token %}
                                     <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>
                                 </form>
-                                </div>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Información del Inscripto -->
+<div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header position-relative">
+                <div class="w-100 text-center"> <!-- Este div centra el título -->
+                    <h5 class="modal-title" id="detailsModalLabel">Detalles del Usuario Asistente</h5>
+                </div>
+                <button type="button" class="btn-close position-absolute" style="right: 1rem;" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <p><strong>Nombre:</strong> <span id="modalNombre"></span></p>
+                <p><strong>Apellido:</strong> <span id="modalApellido"></span></p>
+                <p><strong>Correo Electrónico:</strong> <span id="modalEmail"></span></p>
+                <p><strong>Documento:</strong> <span id="modalDocumento"></span></p>
+                <p><strong>Cuit:</strong> <span id="modalCuit"></span></p>
+                <p><strong>Fecha de Nacimiento:</strong> <span id="modalFechaNacimiento"></span></p>
+                <p><strong>Teléfono Personal:</strong> <span id="modalTelefonoPersonal"></span></p>
+                <p><strong>Teléfono de Emergencia:</strong> <span id="modalTelefonoEmergencia"></span></p>
+                <p><strong>Dependencia:</strong> <span id="modalDependencia"></span></p>
+                <p><strong>Grupo Sanguíneo:</strong> <span id="modalGrupoSanguineo"></span></p>
+                <p><strong>Régimen Comida:</strong> <span id="modalRegimenComida"></span></p>
+                <p><strong>Otro Régimen Comida:</strong> <span id="modalRegimenComidaOtro"></span></p>
+                <p><strong>Alergias:</strong> <span id="modalAlergias"></span></p>
+                <p><strong>Otra Alergia:</strong> <span id="modalOtraAlergia"></span></p>
+                <p><strong>Medicamentos:</strong> <span id="modalMedicamentos"></span></p>
+                <p><strong>Otro Medicamento:</strong> <span id="modalOtroMedicamento"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
+</div>
+<!-- Modal de Actividades del Inscripto -->
+<div class="modal fade" id="actividadesModal" tabindex="-1" aria-labelledby="actividadesModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header position-relative">
+                <div class="w-100 text-center"> <!-- Este div centra el título -->
+                    <h5 class="modal-title" id="actividadesModalLabel">Actividades del Usuario Asistente</h5>
+                </div>
+                <button type="button" class="btn-close position-absolute" style="right: 1rem;" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul id="actividades-lista-modal" class="list-group">
+                    <!-- Aca se listan las actividades -->
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .modal-body {
+        text-align: center; 
+    }
+    .modal-title {
+        margin: 0 auto; 
+    }
+</style>
 
 {% endblock %}
 
@@ -74,7 +148,7 @@
             inputs.forEach(input => {
                 input.addEventListener('input', () => {
                     const filterValues = Array.from(inputs).map(input => input.value.toLowerCase());
-                    
+
                     for (let i = 0; i < rows.length; i++) {
                         let shouldHide = false;
                         const cells = rows[i].getElementsByTagName('td');
@@ -95,7 +169,64 @@
                 });
             });
         });
+
+  function setModalDetails(nombre, apellido, email, documento, cuit, fecha_nacimiento, telefono_personal, telefono_emergencia, dependencia, grupo_sanguineo, regimen_comida, regimen_comida_otro, alergia, alergia_otro, medicamento, medicamento_otro) {
+      document.getElementById('modalNombre').textContent = nombre;
+      document.getElementById('modalApellido').textContent = apellido;
+      document.getElementById('modalEmail').textContent = email;
+      document.getElementById('modalDocumento').textContent = documento;
+      document.getElementById('modalCuit').textContent = cuit;
+      document.getElementById('modalFechaNacimiento').textContent = fecha_nacimiento;
+      document.getElementById('modalTelefonoPersonal').textContent = telefono_personal;
+      document.getElementById('modalTelefonoEmergencia').textContent = telefono_emergencia;
+      document.getElementById('modalDependencia').textContent = dependencia;
+      document.getElementById('modalGrupoSanguineo').textContent = grupo_sanguineo;
+      document.getElementById('modalRegimenComida').textContent = regimen_comida;
+      document.getElementById('modalRegimenComidaOtro').textContent = regimen_comida_otro;
+      document.getElementById('modalAlergias').textContent = alergia;
+      document.getElementById('modalOtraAlergia').textContent = alergia_otro;
+      document.getElementById('modalMedicamentos').textContent = medicamento;
+      document.getElementById('modalOtroMedicamento').textContent = medicamento_otro;
+  }
+
+  
+
+  function loadActividades(inscriptoId) {
+    const actividadesModal = new bootstrap.Modal(document.getElementById('actividadesModal'));
+    const actividadesLista = document.getElementById('actividades-lista-modal');
+    const urlTemplate = "{% url 'coordinador_ver_actividades' 0 %}";
+
+    // Limpio la lista anterior
+    actividadesLista.innerHTML = '';
+
+    // Cargo el ID de inscripto a la url
+    const url = urlTemplate.replace('0', inscriptoId); 
+    
+    // Petición para obtener las actividades del inscripto
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.actividades_inscriptas && data.actividades_inscriptas.length > 0) {
+                data.actividades_inscriptas.forEach(actividad => {
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.innerHTML = `
+                        <strong>Nombre:</strong> ${actividad.nombre} <br>
+                        <strong>Fecha:</strong> ${actividad.fecha} <br>
+                        <strong>Hora Inicio:</strong> ${actividad.hora_inicio} <br>
+                        <strong>Aula:</strong> ${actividad.aula}
+                    `; 
+                    actividadesLista.appendChild(li);
+                });
+            } else {
+                const li = document.createElement('li');
+                li.className = 'list-group-item';
+                li.textContent = 'No hay actividades.';
+                actividadesLista.appendChild(li);
+            }
+            actividadesModal.show();
+        })
+        .catch(error => console.error('Error al cargar las actividades:', error));
+}
 </script>
-
 {% endblock %}
-

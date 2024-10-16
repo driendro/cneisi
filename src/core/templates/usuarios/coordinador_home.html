@@ -47,7 +47,7 @@
                             <div class="btn-group" role="group">
                                 <!-- Ver más información del inscripto -->
                                 <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal"
-                                    onclick="setModalDetails('{{ un_inscripto.user.first_name }}', '{{ un_inscripto.user.last_name }}', '{{ un_inscripto.user.email }}', '{{ un_inscripto.documento }}', '{{ un_inscripto.cuit }}', '{{ un_inscripto.fecha_nacimiento }}', '{{ un_inscripto.telefono_personal }}', '{{ un_inscripto.telefono_emergencia }}', '{{ un_inscripto.dependencia }}', '{{ un_inscripto.grupo_sanguineo }}', '{{ un_inscripto.regimen_comida }}', '{{ un_inscripto.regimen_comida_otro }}', '{{ un_inscripto.alergia }}', '{{ un_inscripto.alergia_otro }}', '{{ un_inscripto.medicamento }}', '{{ un_inscripto.medicamento_otro }}')">
+                                    onclick="setModalDetails('{{ un_inscripto.user.first_name }}', '{{ un_inscripto.user.last_name }}', '{{ un_inscripto.user.email }}', '{{ un_inscripto.documento }}', '{{ un_inscripto.cuit }}', '{{ un_inscripto.fecha_nacimiento }}', '{{ un_inscripto.telefono_personal }}', '{{ un_inscripto.telefono_emergencia }}', '{{ un_inscripto.dependencia }}', '{{ un_inscripto.get_grupo_sangineo_display }}', '{{ un_inscripto.get_regimen_comida_display }}', '{{ un_inscripto.regimen_comida_otro }}', '{{ un_inscripto.alergia }}', '{{ un_inscripto.alergia_otro }}', '{{ un_inscripto.medicamento }}', '{{ un_inscripto.medicamento_otro }}')">
                                     {% bs_icon 'eye' %}
                                 </button>
                                 <!-- Ver actividades en las que está inscripto -->
@@ -74,7 +74,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header position-relative">
-                <div class="w-100 text-center"> <!-- Este div centra el título -->
+                <div class="w-100 text-center">
                     <h5 class="modal-title" id="detailsModalLabel">Detalles del Usuario Asistente</h5>
                 </div>
                 <button type="button" class="btn-close position-absolute" style="right: 1rem;" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -108,7 +108,7 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header position-relative">
-                <div class="w-100 text-center"> <!-- Este div centra el título -->
+                <div class="w-100 text-center">
                     <h5 class="modal-title" id="actividadesModalLabel">Actividades del Usuario Asistente</h5>
                 </div>
                 <button type="button" class="btn-close position-absolute" style="right: 1rem;" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -171,6 +171,16 @@
         });
 
   function setModalDetails(nombre, apellido, email, documento, cuit, fecha_nacimiento, telefono_personal, telefono_emergencia, dependencia, grupo_sanguineo, regimen_comida, regimen_comida_otro, alergia, alergia_otro, medicamento, medicamento_otro) {
+      
+      if(regimen_comida_otro =='')
+        regimen_comida_otro = 'no'
+
+      if(alergia_otro =='')
+        alergia_otro = 'no'
+
+      if(medicamento_otro =='')
+        medicamento_otro = 'no'
+      
       document.getElementById('modalNombre').textContent = nombre;
       document.getElementById('modalApellido').textContent = apellido;
       document.getElementById('modalEmail').textContent = email;

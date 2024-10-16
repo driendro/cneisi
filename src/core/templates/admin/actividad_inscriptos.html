@@ -58,7 +58,7 @@
                                 
                                     <!-- Ver más información del inscripto -->
                                     <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal"
-                                        onclick="setModalDetails('{{ un_asistente.pk }}', '{{ un_asistente.user.first_name }}', '{{ un_asistente.user.last_name }}', '{{ un_asistente.user.email }}', '{{ un_asistente.documento }}', '{{ un_asistente.cuit }}', '{{ un_asistente.fecha_nacimiento }}', '{{ un_asistente.telefono_personal }}', '{{ un_asistente.telefono_emergencia }}', '{{ un_asistente.dependencia }}', '{{ un_asistente.grupo_sanguineo }}', '{{ un_asistente.regimen_comida }}', '{{ un_asistente.regimen_comida_otro }}', '{{ un_asistente.alergia }}', '{{ un_asistente.alergia_otro }}', '{{ un_asistente.medicamento }}', '{{ un_asistente.medicamento_otro }}')">
+                                        onclick="setModalDetails('{{ un_asistente.pk }}', '{{ un_asistente.user.first_name }}', '{{ un_asistente.user.last_name }}', '{{ un_asistente.user.email }}', '{{ un_asistente.documento }}', '{{ un_asistente.cuit }}', '{{ un_asistente.fecha_nacimiento }}', '{{ un_asistente.telefono_personal }}', '{{ un_asistente.telefono_emergencia }}', '{{ un_asistente.dependencia }}', '{{ un_asistente.get_grupo_sangineo_display }}', '{{ un_asistente.get_regimen_comida_display }}', '{{ un_asistente.regimen_comida_otro }}', '{{ un_asistente.alergia }}', '{{ un_asistente.alergia_otro }}', '{{ un_asistente.medicamento }}', '{{ un_asistente.medicamento_otro }}')">
                                         {% bs_icon 'eye' %}
                                     </button>
                                     
@@ -189,6 +189,16 @@
         }
 
         function setModalDetails(pk, nombre, apellido, email, documento, cuit, fechaNacimiento, telefonoPersonal, telefonoEmergencia, dependencia, grupoSanguineo, regimenComida, regimenComidaOtro, alergias, otraAlergia, medicamentos, otroMedicamento) {
+            
+            if(regimenComidaOtro =='')
+                regimenComidaOtro = 'no'
+
+            if(otraAlergia =='')
+                otraAlergia = 'no'
+
+            if(otroMedicamento =='')
+                otroMedicamento = 'no'
+            
             document.getElementById('modalNombre').innerText = nombre;
             document.getElementById('modalApellido').innerText = apellido.toUpperCase();
             document.getElementById('modalEmail').innerText = email;

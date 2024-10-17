@@ -19,20 +19,20 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav ms-auto p-4 p-lg-0">
-            {% if request.user.is_authenticated and request.user|has_group:"asistente"  %}
-                <a class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" href="{% url 'perfil_home' %}">Actividades</a>
-                <a class="btn btn-danger py-4 px-lg-5 d-none d-lg-block" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
-                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
-            {% elif request.user.is_authenticated and request.user|has_group:"coordinador"  %}
-                <a class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" href="{% url 'perfil_home' %}">Administracion</a>
-                <a class="btn btn-danger py-4 px-lg-5 d-none d-lg-block" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
-                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
+            {% if request.user.is_authenticated and request.user|has_group:"asistente" %}
+                <a class="btn btn-primary py-4 px-lg-5" href="{% url 'perfil_home' %}">Actividades</a>
+                <a class="btn btn-danger py-4 px-lg-5" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>            
+                <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
+            {% elif request.user.is_authenticated and request.user|has_group:"coordinador" %}
+                <a class="btn btn-primary py-4 px-lg-5" href="{% url 'perfil_home' %}">Administración</a>
+                <a class="btn btn-danger py-4 px-lg-5" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
+                <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
             {% elif request.user.is_authenticated and request.user.is_staff %}
-                <a class="btn btn-primary py-4 px-lg-5 d-none d-lg-block" href="{% url 'staff_home' %}">Actividades</a>
-                <a class="btn btn-danger py-4 px-lg-5 d-none d-lg-block" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
-                    <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
+                <a class="btn btn-primary py-4 px-lg-5" href="{% url 'staff_home' %}">Actividades</a>
+                <a class="btn btn-danger py-4 px-lg-5" href="#" onclick="document.getElementById('logout-form').submit(); return false;">Salir</a>
+                <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">{% csrf_token %}</form>
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-primary py-4 px-lg-5 d-none d-lg-block">Ingresar {% bs_icon "arrow-right" size='2em' %}</a>
+                <a href="{% url 'login' %}" class="btn btn-primary py-4 px-lg-5">Ingresar {% bs_icon "arrow-right" size='2em' %}</a>
             {% endif %}
             </div>
         </div>

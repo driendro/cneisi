@@ -63,7 +63,7 @@
             <!-- Capa de información adicional con animación -->
             <div class="card-overlay">
               <div class="card-overlay-content">
-                <p>{{ actividad.descripcion|truncatechars:100 }}</p>
+                <p>{{ actividad.descripcion|truncatechars:600 }}</p>
                 {% if actividad.habilitada and actividad.inscripcion %}
                   <form action="{% url 'actividad_inscribirse' actividad.id %}" method="post">
                     {% csrf_token %}

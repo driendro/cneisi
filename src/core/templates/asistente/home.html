@@ -5,9 +5,7 @@
 {% block content %}
 
 <!-- Imagen de fondo -->
-<div class="image-background" style="background-image: url('{% static '..\static\img\fondo 1400X600.jpg' %}');">
-</div>
-
+<div class="image-background" style="background-image: url('{% static 'img/fondo 1400X600.jpg' %}');"></div>
 
 <div class="container py-4 content-foreground">
   <div class="row justify-content-center">
@@ -65,7 +63,7 @@
             <!-- Capa de información adicional con animación -->
             <div class="card-overlay">
               <div class="card-overlay-content">
-                <p>{{ actividad.descripcion|truncatechars:100 }}</p>
+                <p>{{ actividad.descripcion|truncatechars:600 }}</p>
                 {% if actividad.habilitada and actividad.inscripcion %}
                   <form action="{% url 'actividad_inscribirse' actividad.id %}" method="post">
                     {% csrf_token %}
@@ -121,25 +119,30 @@
     background-size: cover; /* Hace que cubra toda la pantalla manteniendo la proporción */
     background-repeat: no-repeat;
     background-position: center; /* Centrar la imagen */
+    filter: brightness(70%); /* Reducir brillo del fondo */
   }
 
   /* Contenido que se superpone a la imagen de fondo */
   .content-foreground {
     position: relative;
     z-index: 1;
+    padding: 20px; /* Añadido padding para pantallas pequeñas */
   }
 
   /* Estilos para la tarjeta de actividad */
   .activity-card {
+    position: relative;
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding: 5px;
+    align-items: center;
+    padding: 0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
     transition: box-shadow 0.3s ease-in-out;
     width: 100%;
     min-width: 200px; /* Ancho mínimo para evitar colapsos */
     max-width: 340px;
+    margin-top: 20px; /* Margen superior para separar las tarjetas */
   }
 
   .activity-card:hover {
@@ -150,6 +153,8 @@
     width: 100%;
     display: flex;
     justify-content: center; /* Centra la imagen dentro de su contenedor */
+    margin: 0;
+    padding: 0;
   }
 
   .card-body {
@@ -201,28 +206,6 @@
     animation: slideUp 0.5s ease-in-out forwards; /* Activa la animación */
     animation-direction: normal; /* Desplazamiento hacia arriba */
   }
-  
-  /* Estilo para asegurar que la tarjeta tiene altura y tamaño adecuado */
-  .activity-card {
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 0; /* Ajusta el padding a 0 */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
-    width: 100%;
-    max-width: 340px;
-    margin: 0; /* Asegura que no haya margen */
-    height: 100%; /* Asegura que ocupe el 100% de la altura */
-  }
-  
-  /* Asegúrate de que el contenedor de la imagen no tiene márgenes */
-  .card-img-container {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-  }
 
   /* Contenido de la capa de la descripción */
   .card-overlay-content {
@@ -235,7 +218,7 @@
     align-items: center; /* Centra horizontalmente el contenido */
     height: 100%; /* Asegura que el contenido ocupe toda la altura */
   }
-
+  
   /* Punto de quiebre para pantallas más pequeñas */
   @media (max-width: 768px) {
     .card-group {
@@ -248,6 +231,7 @@
       width: 100%; /* Asegura que las tarjetas ocupen el 100% del ancho disponible en pantallas pequeñas */
       max-width: none; /* Elimina la limitación del ancho */
       margin: 10px 0; /* Añade margen vertical entre las tarjetas */
+      margin-bottom: 20px;
     }
 
     .table-responsive {
@@ -267,10 +251,13 @@
   @media (max-width: 576px) {
     .activity-card {
       flex-direction: column; /* Asegura que el contenido de las tarjetas se apile verticalmente */
+      width: 100%;
+      margin: 5px 0; /* Reduce los márgenes entre tarjetas */
     }
 
     h1, .text-center {
-      font-size: 18px; /* Reduce aún más el tamaño de los títulos en pantallas muy pequeñas */
+      font-size: 16px; /* Reduce aún más el tamaño de los títulos en pantallas muy pequeñas */
+      margin: 10px 0;
     }
 
     .image-background {
@@ -308,9 +295,5 @@
 </style>
 
 
-
-
 {% endblock %}
-
-
 

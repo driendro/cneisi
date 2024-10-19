@@ -54,11 +54,18 @@
                                 <button class="btn btn-info btn-sm" onclick="loadActividades('{{ un_inscripto.pk }}')">
                                     {% bs_icon 'card-list' %}
                                 </button>
+
+                                <!-- Editar asistente -->
                                 <a class="btn btn-warning btn-sm" href="{% url 'coordinador_editar_asistente' pk=un_inscripto.pk %}" role="button">{% bs_icon 'pencil-square' %}</a>
-                                <form action="{% url 'coordinador_eliminar_asistente' pk=un_inscripto.pk %}" method="post" style="display: inline">
-                                    {% csrf_token %}
-                                    <button class="btn btn-danger btn-sm" type="submit">{% bs_icon 'trash3' %}</button>
-                                </form>
+                                
+                                <!-- Eliminar asistente -->
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal"
+                                    data-url="{% url 'coordinador_eliminar_asistente' pk=un_inscripto.pk %}"
+                                    onclick="setDeleteFormAction(this.dataset.url); event.preventDefault();">
+                                    {% bs_icon 'trash3' %}
+                                </button>
+
+                                
                             </div>
                         </td>
                     </tr>
@@ -125,6 +132,27 @@
     </div>
 </div>
 
+<!-- Modal de Confirmación -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header d-flex justify-content-between">
+                <h5 class="modal-title" id="confirmDeleteModalLabel" style="flex: 1; text-align: center;">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro de que desea eliminar al asistente?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <form id="deleteForm" action="" method="post" style="display: inline">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit">Eliminar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <style>
     .modal-body {
@@ -169,6 +197,10 @@
                 });
             });
         });
+
+        function setDeleteFormAction(url) {
+            document.getElementById('deleteForm').action = url;
+        }
 
   function setModalDetails(nombre, apellido, email, documento, cuit, fecha_nacimiento, telefono_personal, telefono_emergencia, dependencia, grupo_sanguineo, regimen_comida, regimen_comida_otro, alergia, alergia_otro, medicamento, medicamento_otro) {
       

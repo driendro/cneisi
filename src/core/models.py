@@ -15,24 +15,24 @@ CARACTER_CHOICES = {
     'chofer': 'Chofer',
 }
 
-GRUPO_FACTOR_CHOICES = {
-    'a+': 'A (+)',
-    'b+': 'B (+)',
-    'ab+': 'AB (+)',
-    'o+': 'O (+)',
-    'a-': 'A (-)',
-    'b-': 'B (-)',
-    'ab-': 'AB (-)',
-    'o-': 'O (-)'
-}
+GRUPO_FACTOR_CHOICES = [
+    ('a+', 'A (+)'),
+    ('b+', 'B (+)'),
+    ('ab+', 'AB (+)'),
+    ('o+', 'O (+)'),
+    ('a-', 'A (-)'),
+    ('b-', 'B (-)'),
+    ('ab-', 'AB (-)'),
+    ('o-', 'O (-)')
+]
 
-REGIMEN_COMIDA_CHOICES = {
-    'ninguno': 'Sin Restricciones',
-    'vegetariano': 'Vegetariano',
-    'celiaco': 'Celiaco',
-    'vegano': 'Vegano',
-    'otros': 'Otros'
-}
+REGIMEN_COMIDA_CHOICES = [
+    ('ninguno', 'Sin Restricciones'),
+    ('vegetariano', 'Vegetariano'),
+    ('celiaco', 'Celiaco'),
+    ('vegano', 'Vegano'),
+    ('otros', 'Otros')
+]
 
 # Create your models here.
 

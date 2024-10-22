@@ -387,7 +387,7 @@ def envio_correos_entradas(request, actividad_id):
                     'nombre': nombre,  # Enviar el nombre del usuario
                     'dependencia': dependencia,
                     'password': password,
-                    'url': 'https://cneisi.frlp.utn.edu.ar/login',
+                    'url': 'https://cneisi.frlp.utn.edu.ar/cuentas/login',
                 },
             )
             # Enviar el correo en un hilo separado para no bloquear la respuesta

@@ -236,14 +236,15 @@ class AsistenteHome(GroupRequiredMixin, TemplateView):
         asistente = UserAsistente.objects.get(user=user)
         # Obtener todas las actividades
         actividades = Actividad.objects.all()
-        # Obtener las actividades en las que el asistente está inscrito desde el modelo Actividad
+        # Obtener las actividades en las que el asistente está inscrito
         actividades_inscritas = Actividad.objects.filter(asistentes=asistente)
-        # Filtrar actividades no inscritas
-        actividades_no_inscritas = actividades.exclude(id__in=actividades_inscritas.values_list('id', flat=True))
+        # Filtrar actividades no inscritas y ordenarlas por fecha ascendente
+        actividades_no_inscritas = actividades.exclude(id__in=actividades_inscritas.values_list('id', flat=True)).order_by('fecha')
         # Agregar al contexto todas las actividades y las inscritas
         context['actividades_no_inscritas'] = actividades_no_inscritas
         context['actividades_inscritas'] = actividades_inscritas
         return context
+
 
 
 @login_required

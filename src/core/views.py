@@ -69,9 +69,9 @@ class LandingPage(TemplateView):
         context = super().get_context_data(**kwargs)
         actividades = Actividad.objects.filter(inscripcion=True).all()
         context['actividades'] = actividades
-        context['actividad_25'] = actividades.filter(fecha=date(2024, 10, 25)).all()
-        context['actividad_26']= actividades.filter(fecha=date(2024,10,26)).all()
-        context['actividad_27']= actividades.filter(fecha=date(2024,10,27)).all()
+        context['actividad_25'] = actividades.filter(fecha=date(2024, 10, 25)).order_by('hora_inicio')
+        context['actividad_26']= actividades.filter(fecha=date(2024,10,26)).order_by('hora_inicio')
+        context['actividad_27']= actividades.filter(fecha=date(2024,10,27)).order_by('hora_inicio')
         context['sponsors'] = Sponsors.objects.all()
         return context
 
@@ -239,7 +239,7 @@ class AsistenteHome(GroupRequiredMixin, TemplateView):
         # Obtener las actividades en las que el asistente está inscrito
         actividades_inscritas = Actividad.objects.filter(asistentes=asistente)
         # Filtrar actividades no inscritas y ordenarlas por fecha ascendente
-        actividades_no_inscritas = actividades.exclude(id__in=actividades_inscritas.values_list('id', flat=True)).order_by('fecha')
+        actividades_no_inscritas = actividades.exclude(id__in=actividades_inscritas.values_list('id', flat=True)).order_by('fecha', 'hora_inicio')
         # Agregar al contexto todas las actividades y las inscritas
         context['actividades_no_inscritas'] = actividades_no_inscritas
         context['actividades_inscritas'] = actividades_inscritas

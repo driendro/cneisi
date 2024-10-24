@@ -201,7 +201,7 @@ class VerActividades(View):
     def get(self, request, pk):
         user_asistente = get_object_or_404(UserAsistente, pk=pk)
 
-        actividades_inscritas = Actividad.objects.filter(asistentes=user_asistente)
+        actividades_inscritas = Actividad.objects.filter(asistentes=user_asistente).order_by('hora_inicio')
 
         actividades_data = [
             {

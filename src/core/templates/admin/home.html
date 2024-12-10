@@ -9,6 +9,7 @@
                 <div class="btn-group" role="group">
                     <a class="btn btn-primary btn-sm" href="{% url 'admin:core_actividad_add' %}" role="button" target="_blank">Nueva Actividad</a>
                     <a class="btn btn-info btn-sm" href="{% url 'enviar_correos' %}" role="button">Notificar Inscriptos</a>
+                    <a class="btn btn-primary btn-sm" href="{% url 'generar_certificados' %}" role="button">Descargar Certificados</a>
                     <form action="{% url 'abrir_inscripciones' %}" method="post" style="display: inline">
                         {% csrf_token %}<button class="btn btn-success btn-sm" type="submit">Abrir Inscripcion</button>
                     </form>

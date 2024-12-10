@@ -38,7 +38,8 @@ from core.views import (
     envio_correos_inscripcion,
     envio_correos_entradas,
     InscriptosActividad,
-    VerActividades
+    VerActividades,
+    generar_certificados
 )
 
 urlpatterns = [
@@ -74,5 +75,6 @@ urlpatterns = [
     path('admin/user/<int:pk>/ver', DetalleAsistente.as_view(), name='admin_ver_asistente'),
     path('admin/<int:pk>/eliminar/<int:actividad_id>/', EliminarInscriptoActividad.as_view(), name='admin_eliminar_inscripto_actividad'),
     path('admin/user/<int:pk>/editar/<int:actividad_id>/', EditarAsistenteAdmin.as_view(), name='admin_editar_asistente'),
-    path('admin/inscribir/<int:actividad_id>/', InscribirAsistenteAdmin.as_view(), name='admin_inscribir_asistente')
+    path('admin/inscribir/<int:actividad_id>/', InscribirAsistenteAdmin.as_view(), name='admin_inscribir_asistente'),
+    path('certificado', generar_certificados, name='generar_certificados')
 ]

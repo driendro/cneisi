@@ -1,6 +1,9 @@
+import os
+import threading
+import zipfile
 from django.contrib import messages
 from django.conf import settings
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.core.mail import EmailMultiAlternatives
 from django.http import Http404, HttpResponseNotAllowed
 from django.urls import reverse_lazy
@@ -13,8 +16,14 @@ from django.views.generic import TemplateView, DeleteView, DetailView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic.list import ListView
 from tablib import Dataset
-import threading
 from datetime import date
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.utils import ImageReader
+from reportlab.pdfbase import pdfmetrics
+from reportlab.lib.colors import Color
+from reportlab.pdfbase.ttfonts import TTFont
+
 
 # Create your views here.
 from .models import UserAsistente, UserCoordinador, Actividad, Dependencia, Sponsors
@@ -474,3 +483,78 @@ class InscribirAsistenteAdmin(UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+
+
+def generar_certificados(request):
+    if request.user.is_authenticated and request.user.is_staff:
+        usuarios = UserAsistente.objects.all()
+
+        # Registrar la fuente personalizada
+        fuente_path = os.path.join(
+            settings.BASE_DIR, 'static/fonts/Planc_wfc_ttf/Planc-SemiBold.ttf')
+        try:
+            pdfmetrics.registerFont(TTFont('Planc-SemiBold', fuente_path))
+            print("Fuente registrada exitosamente.")
+        except Exception as e:
+            print(f"Error al registrar la fuente: {e}")
+
+        # Hex to RGB
+        hex_color = '314a60'
+        r = int(hex_color[0:2], 16) / 255.0
+        g = int(hex_color[2:4], 16) / 255.0
+        b = int(hex_color[4:6], 16) / 255.0
+        # Ruta base para guardar los certificados
+        base_path = os.path.join(settings.MEDIA_ROOT, 'certificados')
+        os.makedirs(base_path, exist_ok=True)
+
+        for usuario in usuarios:
+            # Crear una carpeta para la dependencia
+            dependencia_path = os.path.join(
+                base_path, usuario.dependencia.nombre_corto.upper())
+            os.makedirs(dependencia_path, exist_ok=True)
+
+            # Ruta del archivo PDF
+            pdf_path = os.path.join(dependencia_path, f"{usuario.documento}.pdf")
+
+            # Crear el PDF
+            c = canvas.Canvas(pdf_path, pagesize=landscape(A4), )
+
+            # Fondo de certificado (imagen PNG)
+            fondo_path = os.path.join(settings.MEDIA_ROOT, 'fondo_certificado.png')
+            fondo = ImageReader(fondo_path)
+            c.drawImage(fondo, 0, 0, width=A4[1], height=A4[0])
+
+            nombre = '{}, {}'.format(
+                usuario.user.last_name.upper(), usuario.user.first_name.title())
+            # Agregar texto personalizado
+            c.setFont("Planc-SemiBold", 40)
+            texto_alto = 40
+            texto_ancho = pdfmetrics.stringWidth(
+                nombre, "Planc-SemiBold", texto_alto)
+            x_centro = A4[1]/2
+            X_texto = x_centro - texto_ancho/2
+            y_texto = A4[0]/2
+            c.setFillColorRGB(r, g, b)
+            c.drawString(X_texto, y_texto, "{}".format(nombre))
+
+            # Guardar el PDF
+            c.save()
+
+         # Crear un archivo zip con los certificados generados
+        zip_path = os.path.join(settings.MEDIA_ROOT, 'certificados.zip')
+        with zipfile.ZipFile(zip_path, 'w') as zipf:
+            for root, dirs, files in os.walk(base_path):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    arcname = os.path.relpath(file_path, base_path)
+                    zipf.write(file_path, arcname)
+
+        # Enviar el archivo zip como respuesta para descargarlo
+        with open(zip_path, 'rb') as f:
+            response = HttpResponse(f.read(), content_type='application/zip')
+            response['Content-Disposition'] = f'attachment; filename="certificados.zip"'
+
+        return response
+
+    else:
+        return redirect('home')  # Redirige a la vista deseada
